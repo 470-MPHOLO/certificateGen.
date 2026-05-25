@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cre8learn - Cybersecurity Certificate Generator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Cre8learn - Professional Certificate Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,8 +13,8 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0a0f1e 0%, #0c1a2a 100%);
-            font-family: 'Segoe UI', 'Courier New', monospace;
+            background: #e8e8e8;
+            font-family: 'Times New Roman', Georgia, serif;
             padding: 40px 20px;
             min-height: 100vh;
             display: flex;
@@ -30,124 +30,111 @@
 
         /* Certificate Card */
         .certificate-card {
-            background: #0f1724;
-            border-radius: 24px;
+            background: white;
+            border-radius: 4px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #d0d0d0;
         }
 
         /* Certificate Canvas */
         .certificate {
-            background: #0a0f1e;
-            border: 2px solid #00ffff;
-            padding: 50px 40px;
+            background: white;
+            border: 1px solid #cccccc;
+            padding: 50px 45px;
             text-align: center;
             position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
-        /* Cyber Grid */
-        .certificate::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.04) 1px, transparent 1px);
-            background-size: 35px 35px;
-            pointer-events: none;
+        /* Decorative Border */
+        .certificate-inner {
+            border: 2px solid #2c5f2d;
+            padding: 35px 30px;
+            position: relative;
         }
 
         .logo {
-            font-size: 1.1rem;
-            letter-spacing: 5px;
-            color: #00ffff;
-            text-shadow: 0 0 8px #00ffff;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            color: #2c5f2d;
             margin-bottom: 20px;
-            font-family: monospace;
-            font-weight: bold;
+            font-family: 'Times New Roman', serif;
+            font-weight: normal;
         }
 
         .cert-title {
-            font-size: 2.2rem;
-            letter-spacing: 6px;
-            color: #00ffff;
-            text-shadow: 0 0 12px #00ffff;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            color: #2c5f2d;
             margin-bottom: 8px;
-            font-weight: 400;
+            font-weight: 500;
         }
 
         .cert-sub {
-            color: #7cb9e8;
+            color: #555555;
             font-size: 0.85rem;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.4);
+            margin-bottom: 30px;
+            border-bottom: 1px solid #d0d0d0;
             display: inline-block;
             padding-bottom: 6px;
         }
 
         .award-text {
-            color: #ccddee;
+            color: #333333;
             font-size: 0.9rem;
-            margin: 20px 0 10px;
-            letter-spacing: 2px;
+            margin: 25px 0 10px;
+            letter-spacing: 1px;
         }
 
         .recipient-name {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: bold;
-            color: #00ffff;
-            text-shadow: 0 0 15px #00ffff;
+            color: #1a3b1a;
             margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 2px;
+            font-family: 'Times New Roman', serif;
+            letter-spacing: 1px;
             word-break: break-word;
+            border-bottom: 1px dotted #cccccc;
+            display: inline-block;
+            padding-bottom: 8px;
         }
 
         .course-name {
-            font-size: 1.2rem;
-            color: #ffffff;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.15), transparent);
-            padding: 10px 25px;
+            font-size: 1.1rem;
+            color: #2c5f2d;
+            padding: 8px 20px;
             display: inline-block;
             margin: 15px 0;
-            border-radius: 30px;
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            font-style: italic;
         }
 
         .cert-details {
-            margin: 25px 0;
+            margin: 30px 0;
             display: flex;
             justify-content: center;
-            gap: 40px;
+            gap: 50px;
             flex-wrap: wrap;
         }
 
         .detail-item {
-            color: #7cb9e8;
+            color: #555555;
             font-size: 0.8rem;
         }
 
         .detail-item span {
             display: block;
-            color: #00ffff;
+            color: #1a3b1a;
             font-size: 0.95rem;
-            margin-top: 5px;
-            font-weight: bold;
+            margin-top: 6px;
         }
 
         .signatures {
             display: flex;
             justify-content: center;
-            gap: 70px;
-            margin: 35px 0 20px;
+            gap: 80px;
+            margin: 40px 0 20px;
             flex-wrap: wrap;
         }
 
@@ -156,42 +143,49 @@
         }
 
         .signature-line .line {
-            width: 160px;
+            width: 180px;
             height: 1px;
-            background: #00ffff;
+            background: #333333;
             margin: 8px 0;
         }
 
         .signature-line .name {
-            color: #00ffff;
+            color: #1a3b1a;
             font-size: 0.85rem;
-            font-weight: bold;
+            font-weight: 500;
         }
 
         .signature-line .title {
-            color: #7cb9e8;
+            color: #777777;
             font-size: 0.7rem;
+        }
+
+        .signature-img {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 5px;
         }
 
         .cert-id {
             font-family: monospace;
             font-size: 0.7rem;
-            color: rgba(0, 255, 255, 0.5);
-            margin-top: 20px;
+            color: #999999;
+            margin-top: 25px;
         }
 
         .footer-note {
             font-size: 0.65rem;
-            color: rgba(0, 255, 255, 0.3);
+            color: #aaaaaa;
             margin-top: 15px;
         }
 
         /* Controls */
         .controls {
-            background: #0f1724;
-            border-radius: 20px;
+            background: white;
+            border-radius: 4px;
             padding: 25px;
-            border: 1px solid rgba(0, 255, 255, 0.2);
+            border: 1px solid #d0d0d0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .control-group {
@@ -200,27 +194,29 @@
 
         .control-group label {
             display: block;
-            color: #00ffff;
+            color: #2c5f2d;
             margin-bottom: 6px;
             font-size: 0.8rem;
-            letter-spacing: 1px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
 
         .control-group input, .control-group select {
             width: 100%;
             padding: 10px 14px;
-            background: #1a2332;
-            border: 1px solid #2a3a4a;
-            border-radius: 8px;
-            color: #ffffff;
-            font-size: 0.95rem;
-            transition: all 0.3s;
+            background: #fafafa;
+            border: 1px solid #cccccc;
+            border-radius: 2px;
+            color: #333333;
+            font-size: 0.9rem;
+            font-family: 'Times New Roman', serif;
+            transition: all 0.2s;
         }
 
         .control-group input:focus, .control-group select:focus {
             outline: none;
-            border-color: #00ffff;
-            box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+            border-color: #2c5f2d;
+            background: white;
         }
 
         .btn-group {
@@ -232,37 +228,42 @@
 
         .btn {
             padding: 10px 24px;
-            background: linear-gradient(135deg, #00ccff, #0066cc);
+            background: #2c5f2d;
             border: none;
-            border-radius: 40px;
-            color: #ffffff;
-            font-weight: bold;
+            border-radius: 2px;
+            color: white;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             font-size: 0.9rem;
+            font-family: 'Times New Roman', serif;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px -5px rgba(0, 255, 255, 0.4);
+            background: #1a3b1a;
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #ff6600, #cc3300);
+            background: #666666;
+        }
+
+        .btn-secondary:hover {
+            background: #444444;
         }
 
         .preview-text {
-            font-size: 0.75rem;
-            color: #7cb9e8;
+            font-size: 0.7rem;
+            color: #888888;
             margin-top: 15px;
             text-align: center;
         }
 
         h3 {
-            color: #00ffff;
+            color: #2c5f2d;
             margin-bottom: 20px;
-            font-size: 1.2rem;
-            border-left: 3px solid #00ffff;
+            font-size: 1.1rem;
+            font-weight: normal;
+            border-left: 3px solid #2c5f2d;
             padding-left: 12px;
         }
 
@@ -270,18 +271,20 @@
             .certificate {
                 padding: 30px 20px;
             }
+            .certificate-inner {
+                padding: 20px 15px;
+            }
             .recipient-name {
-                font-size: 1.6rem;
+                font-size: 1.5rem;
             }
             .cert-title {
-                font-size: 1.4rem;
-                letter-spacing: 3px;
+                font-size: 1.5rem;
             }
             .signatures {
-                gap: 25px;
+                gap: 30px;
             }
             .signature-line .line {
-                width: 100px;
+                width: 120px;
             }
         }
     </style>
@@ -290,44 +293,46 @@
     <div class="container">
         <div class="certificate-card">
             <div id="certificate" class="certificate">
-                <div class="logo">◈ CRE8LEARN INSTITUTE ◈</div>
-                <div class="cert-title">CERTIFICATE</div>
-                <div class="cert-sub">OF COMPLETION</div>
-                
-                <div class="award-text">THIS CERTIFICATE IS PROUDLY AWARDED TO</div>
-                <div class="recipient-name" id="recipientNameDisplay">[RECIPIENT NAME]</div>
-                
-                <div class="course-name" id="courseDisplay">Cybersecurity Awareness Workshop</div>
-                
-                <div class="cert-details">
-                    <div class="detail-item">COMPLETION DATE<br><span id="dateDisplay">[DATE]</span></div>
-                    <div class="detail-item">DURATION<br><span id="durationDisplay">2 Days Intensive</span></div>
-                    <div class="detail-item">CREDITS<br><span>CI-CS-2026</span></div>
-                </div>
-                
-                <div class="signatures">
-                    <div class="signature-line">
-                        <div class="line"></div>
-                        <div class="name">Teboho Mpholo</div>
-                        <div class="title">Founder & Instructor</div>
+                <div class="certificate-inner">
+                    <div class="logo">CRE8LEARN INSTITUTE</div>
+                    <div class="cert-title">CERTIFICATE</div>
+                    <div class="cert-sub">OF COMPLETION</div>
+                    
+                    <div class="award-text">THIS CERTIFICATE IS AWARDED TO</div>
+                    <div class="recipient-name" id="recipientNameDisplay">[Name]</div>
+                    
+                    <div class="course-name" id="courseDisplay">Cybersecurity Awareness Workshop</div>
+                    
+                    <div class="cert-details">
+                        <div class="detail-item">DATE<br><span id="dateDisplay">[Date]</span></div>
+                        <div class="detail-item">DURATION<br><span id="durationDisplay">2 Days</span></div>
                     </div>
-                    <div class="signature-line">
-                        <div class="line"></div>
-                        <div class="name">_________________</div>
-                        <div class="title">Participant Signature</div>
+                    
+                    <div class="signatures">
+                        <div class="signature-line">
+                            <img id="signatureImg" class="signature-img" style="display: none;">
+                            <div id="signatureLine" class="line"></div>
+                            <div class="name">Teboho Mpholo</div>
+                            <div class="title">Founder & Instructor</div>
+                        </div>
+                        <div class="signature-line">
+                            <div class="line"></div>
+                            <div class="name">_________________</div>
+                            <div class="title">Participant</div>
+                        </div>
                     </div>
+                    
+                    <div class="cert-id" id="certIdDisplay">CRL-CS-0000</div>
+                    <div class="footer-note">cre8learn_institute@outlook.com | +266 63608813</div>
                 </div>
-                
-                <div class="cert-id" id="certIdDisplay">CERT-ID: CRL-CS-0000</div>
-                <div class="footer-note">cre8learn_institute@outlook.com | +266 63608813</div>
             </div>
         </div>
 
         <div class="controls">
-            <h3>⚡ GENERATE CERTIFICATE</h3>
+            <h3>CERTIFICATE DETAILS</h3>
             <div class="control-group">
-                <label>FULL NAME OF RECIPIENT</label>
-                <input type="text" id="recipientName" placeholder="e.g., Thabo Mokoena">
+                <label>RECIPIENT FULL NAME</label>
+                <input type="text" id="recipientName" placeholder="Enter full name">
             </div>
             <div class="control-group">
                 <label>COURSE / WORKSHOP</label>
@@ -345,17 +350,21 @@
             <div class="control-group">
                 <label>DURATION</label>
                 <select id="durationSelect">
-                    <option value="2 Days Intensive">2 Days Intensive</option>
+                    <option value="2 Days">2 Days</option>
                     <option value="6 Weeks">6 Weeks</option>
                     <option value="3 Months">3 Months</option>
-                    <option value="1 Day Workshop">1 Day Workshop</option>
+                    <option value="1 Day">1 Day</option>
                 </select>
             </div>
-            <div class="btn-group">
-                <button class="btn" id="updateBtn">🔄 PREVIEW CERTIFICATE</button>
-                <button class="btn btn-secondary" id="downloadBtn">📄 DOWNLOAD AS PDF</button>
+            <div class="control-group">
+                <label>SIGNATURE IMAGE URL (optional)</label>
+                <input type="text" id="signatureUrl" placeholder="Paste image URL of your signature">
             </div>
-            <div class="preview-text">💡 Tip: Enter recipient details, click PREVIEW, then download as PDF. High quality for printing.</div>
+            <div class="btn-group">
+                <button class="btn" id="updateBtn">PREVIEW CERTIFICATE</button>
+                <button class="btn btn-secondary" id="downloadBtn">DOWNLOAD AS PDF</button>
+            </div>
+            <div class="preview-text">Enter details, click PREVIEW, then download as PDF. To add your signature, upload an image online and paste the URL.</div>
         </div>
     </div>
 
@@ -370,34 +379,30 @@
         const durationSelect = document.getElementById('durationSelect');
         const durationDisplay = document.getElementById('durationDisplay');
         const certIdDisplay = document.getElementById('certIdDisplay');
+        const signatureUrl = document.getElementById('signatureUrl');
+        const signatureImg = document.getElementById('signatureImg');
+        const signatureLine = document.getElementById('signatureLine');
         const updateBtn = document.getElementById('updateBtn');
         const downloadBtn = document.getElementById('downloadBtn');
         const certificate = document.getElementById('certificate');
 
-        // Generate Certificate ID
         function generateCertId() {
             const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-            return `CERT-ID: CRL-CS-${random}`;
+            return `CRL-${random}`;
         }
 
-        // Format date nicely
         function formatDate(dateString) {
             if (!dateString) return null;
             const date = new Date(dateString);
             return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         }
 
-        // Update Certificate Preview
         function updateCertificate() {
             let name = recipientInput.value.trim();
             if (name === '') {
-                name = '[RECIPIENT NAME]';
-                recipientDisplay.style.opacity = '0.6';
-            } else {
-                recipientDisplay.style.opacity = '1';
+                name = '[Name]';
             }
-            recipientDisplay.textContent = name.toUpperCase();
-            
+            recipientDisplay.textContent = name;
             courseDisplay.textContent = courseSelect.value;
             
             let formattedDate = formatDate(dateInput.value);
@@ -406,37 +411,47 @@
                 formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
             }
             dateDisplay.textContent = formattedDate;
-            
             durationDisplay.textContent = durationSelect.value;
             certIdDisplay.textContent = generateCertId();
+
+            // Handle signature image
+            const sigUrl = signatureUrl.value.trim();
+            if (sigUrl) {
+                signatureImg.src = sigUrl;
+                signatureImg.style.display = 'inline-block';
+                signatureImg.style.maxWidth = '150px';
+                signatureLine.style.display = 'none';
+            } else {
+                signatureImg.style.display = 'none';
+                signatureLine.style.display = 'block';
+            }
         }
 
-        // Download as PDF
         async function downloadPDF() {
             const btn = downloadBtn;
             const originalText = btn.textContent;
-            btn.textContent = '⏳ GENERATING PDF...';
+            btn.textContent = 'Generating PDF...';
             btn.disabled = true;
             
             try {
                 const element = certificate;
                 const opt = {
-                    margin:        [0.5, 0.5, 0.5, 0.5],
-                    filename:     `cre8learn_certificate_${recipientInput.value.trim() || 'recipient'}.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, backgroundColor: '#0a0f1e', letterRendering: true },
-                    jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+                    margin: [0.5, 0.5, 0.5, 0.5],
+                    filename: `certificate_${recipientInput.value.trim() || 'recipient'}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, backgroundColor: '#ffffff', letterRendering: true },
+                    jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
                 };
                 await html2pdf().set(opt).from(element).save();
                 
-                btn.textContent = '✅ PDF SAVED!';
+                btn.textContent = 'PDF Saved!';
                 setTimeout(() => {
                     btn.textContent = originalText;
                     btn.disabled = false;
                 }, 2000);
             } catch (error) {
                 console.error('PDF Error:', error);
-                btn.textContent = '❌ ERROR';
+                btn.textContent = 'Error';
                 setTimeout(() => {
                     btn.textContent = originalText;
                     btn.disabled = false;
@@ -444,7 +459,6 @@
             }
         }
 
-        // Set default date to today
         function setDefaultDate() {
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -454,7 +468,6 @@
             updateCertificate();
         }
 
-        // Events
         updateBtn.addEventListener('click', updateCertificate);
         downloadBtn.addEventListener('click', downloadPDF);
         recipientInput.addEventListener('keypress', (e) => {
@@ -463,8 +476,8 @@
         courseSelect.addEventListener('change', updateCertificate);
         durationSelect.addEventListener('change', updateCertificate);
         dateInput.addEventListener('change', updateCertificate);
+        signatureUrl.addEventListener('input', updateCertificate);
 
-        // Initialize
         setDefaultDate();
     </script>
 </body>

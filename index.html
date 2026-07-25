@@ -1393,18 +1393,32 @@
                 btn.disabled = true;
                 try {
                     const element = document.getElementById('certificate');
+                    // Temporarily remove zoom transform to capture full element
+                    const originalTransform = element.style.transform;
+                    const originalOrigin = element.style.transformOrigin;
+                    element.style.transform = 'none';
+                    element.style.transformOrigin = 'center center';
+                    // Wait for reflow
+                    await new Promise(r => setTimeout(r, 50));
+
                     const canvas = await html2canvas(element, {
-                        scale: 2.5,
+                        scale: 3,
                         backgroundColor: '#ffffff',
                         useCORS: true,
                         logging: false,
+                        width: element.scrollWidth,
+                        height: element.scrollHeight
                     });
+                    // Restore transform
+                    element.style.transform = originalTransform;
+                    element.style.transformOrigin = originalOrigin;
+
                     const imgData = canvas.toDataURL('image/jpeg', 0.98);
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF('landscape', 'in', 'a4');
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     const pdfHeight = pdf.internal.pageSize.getHeight();
-                    const margin = 0.25; // inches
+                    const margin = 0.3;
                     const maxWidth = pdfWidth - 2 * margin;
                     const maxHeight = pdfHeight - 2 * margin;
                     const imgAspect = canvas.width / canvas.height;
@@ -1434,12 +1448,24 @@
                 btn.disabled = true;
                 try {
                     const el = document.getElementById('certificate');
+                    // Same fix for PNG: remove transform
+                    const originalTransform = el.style.transform;
+                    const originalOrigin = el.style.transformOrigin;
+                    el.style.transform = 'none';
+                    el.style.transformOrigin = 'center center';
+                    await new Promise(r => setTimeout(r, 50));
+
                     const canvas = await html2canvas(el, {
-                        scale: 2.5,
+                        scale: 3,
                         backgroundColor: '#ffffff',
                         useCORS: true,
                         logging: false,
+                        width: el.scrollWidth,
+                        height: el.scrollHeight
                     });
+                    el.style.transform = originalTransform;
+                    el.style.transformOrigin = originalOrigin;
+
                     const link = document.createElement('a');
                     link.download = `certificate_${recipientInput.value.trim() || 'recipient'}.png`;
                     link.href = canvas.toDataURL('image/png');

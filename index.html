@@ -4,18 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cre8learn Pro — Certificate Generator</title>
-
-    <!-- Font Awesome 6 (Free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- html2pdf + html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
     </script>
-
     <style>
-        /* ---------- RESET & BASE ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -55,7 +49,6 @@
             margin: 0 auto;
         }
 
-        /* ---------- HEADER ---------- */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -136,12 +129,6 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
-        .header-btn i {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* ---------- LAYOUT: SIDEBAR + PREVIEW ---------- */
         .workspace {
             display: grid;
             grid-template-columns: 380px 1fr;
@@ -155,7 +142,6 @@
             }
         }
 
-        /* ---------- SIDEBAR ---------- */
         .sidebar {
             background: var(--panel-bg);
             border-radius: var(--radius);
@@ -248,10 +234,6 @@
             box-shadow: 0 0 0 4px var(--primary-glow);
         }
 
-        .control-input::placeholder {
-            color: #adb5bd;
-        }
-
         .control-select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
@@ -267,7 +249,6 @@
             gap: 12px;
         }
 
-        /* Upload zones */
         .upload-zone {
             border: 2px dashed var(--border);
             border-radius: 10px;
@@ -318,7 +299,6 @@
             cursor: pointer;
         }
 
-        /* Template selector */
         .template-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -362,7 +342,6 @@
             color: var(--primary);
         }
 
-        /* Color picker row */
         .color-row {
             display: flex;
             gap: 10px;
@@ -403,7 +382,6 @@
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
         }
 
-        /* Buttons */
         .action-bar {
             display: flex;
             flex-wrap: wrap;
@@ -435,10 +413,6 @@
             background: var(--primary-light);
             transform: translateY(-1px);
             box-shadow: 0 8px 24px var(--primary-glow);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
         }
 
         .btn-secondary {
@@ -486,7 +460,6 @@
             box-shadow: 0 8px 24px rgba(11, 94, 66, 0.25);
         }
 
-        /* ---------- PREVIEW PANEL ---------- */
         .preview-panel {
             background: var(--panel-bg);
             border-radius: var(--radius);
@@ -547,11 +520,6 @@
             background: #e9ecef;
         }
 
-        .toolbar-btn i {
-            font-size: 0.75rem;
-        }
-
-        /* Certificate wrapper */
         .certificate-wrapper {
             background: #e8e8e8;
             border-radius: 12px;
@@ -572,7 +540,6 @@
             pointer-events: none;
         }
 
-        /* ---------- CERTIFICATE STYLES ---------- */
         #certificate {
             background: #ffffff;
             width: 100%;
@@ -588,7 +555,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Template: Classic */
         .template-classic #certificate {
             background: #fefcf7;
             border: 8px double #b8860b;
@@ -616,7 +582,6 @@
             color: #b8860b;
         }
 
-        /* Template: Modern */
         .template-modern #certificate {
             background: linear-gradient(145deg, #f0f7ff, #ffffff);
             border: none;
@@ -648,7 +613,6 @@
             color: #1a5276;
         }
 
-        /* Template: Elegant */
         .template-elegant #certificate {
             background: #1a1a2e;
             border: none;
@@ -692,11 +656,7 @@
         .template-elegant .cert-signature-title {
             color: #a09880;
         }
-        .template-elegant .cert-footer {
-            color: #807860;
-        }
 
-        /* Template: Minimal */
         .template-minimal #certificate {
             background: #ffffff;
             border: 1px solid #d0d0d0;
@@ -729,11 +689,11 @@
             font-weight: 400;
         }
 
-        /* Shared certificate elements */
         .cert-inner {
             flex: 1;
             display: flex;
             flex-direction: column;
+            text-align: center;
         }
 
         .cert-logo {
@@ -751,6 +711,7 @@
             font-weight: 600;
             font-family: 'Times New Roman', serif;
             margin-bottom: 2px;
+            text-align: center;
         }
 
         .cert-sub {
@@ -770,6 +731,7 @@
             letter-spacing: 0.5px;
             margin: 8px 0 4px;
             font-family: 'Times New Roman', serif;
+            text-align: center;
         }
 
         .cert-recipient {
@@ -864,14 +826,6 @@
             margin-top: 8px;
         }
 
-        .cert-footer {
-            font-size: 0.55rem;
-            color: #bbb;
-            margin-top: 6px;
-            letter-spacing: 0.3px;
-        }
-
-        /* QR code in certificate */
         .cert-qr {
             position: absolute;
             bottom: 18px;
@@ -887,7 +841,6 @@
             object-fit: contain;
         }
 
-        /* ---------- TOAST ---------- */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -917,7 +870,6 @@
             font-size: 1.1rem;
         }
 
-        /* ---------- RESPONSIVE ---------- */
         @media (max-width: 1024px) {
             .sidebar {
                 position: relative;
@@ -1020,7 +972,6 @@
             }
         }
 
-        /* Print styles for PDF */
         @media print {
             body {
                 background: #fff;
@@ -1058,15 +1009,13 @@
 
 <body>
 
-    <!-- TOAST -->
-    <div id="toast" class="toast">
+    <div class="toast" id="toast">
         <i class="fas fa-check-circle" style="color:#4ade80;"></i>
         <span id="toastMessage">Ready</span>
     </div>
 
     <div class="app">
 
-        <!-- HEADER -->
         <header class="app-header">
             <div class="brand">
                 <div class="brand-icon"><i class="fas fa-certificate"></i></div>
@@ -1078,21 +1027,17 @@
             </div>
         </header>
 
-        <!-- WORKSPACE -->
         <div class="workspace">
 
-            <!-- SIDEBAR -->
             <aside class="sidebar" id="sidebar">
 
                 <div class="sidebar-title"><i class="fas fa-sliders-h"></i> Certificate Controls</div>
 
-                <!-- Recipient -->
                 <div class="control-section">
                     <label class="control-label"><i class="fas fa-user"></i> Recipient Full Name</label>
                     <input class="control-input" id="recipientName" placeholder="e.g. Lerato Mokoena" value="Lerato Mokoena">
                 </div>
 
-                <!-- Course + Date -->
                 <div class="control-section">
                     <div class="row-2">
                         <div>
@@ -1112,7 +1057,6 @@
                     </div>
                 </div>
 
-                <!-- Duration + ID -->
                 <div class="control-section">
                     <div class="row-2">
                         <div>
@@ -1132,7 +1076,6 @@
                     </div>
                 </div>
 
-                <!-- Template -->
                 <div class="control-section">
                     <label class="control-label"><i class="fas fa-layer-group"></i> Template Style</label>
                     <div class="template-grid" id="templateGrid">
@@ -1143,7 +1086,6 @@
                     </div>
                 </div>
 
-                <!-- Color accent -->
                 <div class="control-section">
                     <label class="control-label"><i class="fas fa-palette"></i> Accent Color</label>
                     <div class="color-row" id="colorRow">
@@ -1156,7 +1098,6 @@
                     </div>
                 </div>
 
-                <!-- Signature Upload -->
                 <div class="control-section">
                     <label class="control-label"><i class="fas fa-pen-fancy"></i> Signature Image</label>
                     <div class="upload-zone" id="sigUploadZone">
@@ -1168,7 +1109,6 @@
                     <div class="control-hint"><i class="fas fa-info-circle"></i> PNG with transparent background recommended</div>
                 </div>
 
-                <!-- Logo Upload -->
                 <div class="control-section">
                     <label class="control-label"><i class="fas fa-image"></i> Logo (optional)</label>
                     <div class="upload-zone" id="logoUploadZone">
@@ -1179,7 +1119,6 @@
                     </div>
                 </div>
 
-                <!-- Actions -->
                 <div class="action-bar">
                     <button class="btn-primary" id="updateBtn"><i class="fas fa-sync-alt"></i> Preview</button>
                     <button class="btn-success" id="downloadPdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
@@ -1193,7 +1132,6 @@
 
             </aside>
 
-            <!-- PREVIEW -->
             <section class="preview-panel">
                 <div class="preview-toolbar">
                     <span class="label"><i class="fas fa-eye"></i> Live Preview</span>
@@ -1207,7 +1145,6 @@
                 <div class="certificate-wrapper" id="certWrapper">
                     <div id="certificate" class="template-classic">
                         <div class="cert-inner" style="position:relative;">
-                            <!-- Logo placeholder -->
                             <div id="logoContainer" style="text-align:center;margin-bottom:4px;">
                                 <img id="logoPreview" style="max-height:48px;max-width:120px;display:none;" alt="Logo">
                                 <div class="cert-logo" id="logoText">CRE8LEARN INSTITUTE</div>
@@ -1239,17 +1176,10 @@
                                     <div class="cert-signature-name">Teboho Mpholo</div>
                                     <div class="cert-signature-title">Founder &amp; Instructor</div>
                                 </div>
-                                <div class="cert-signature-block">
-                                    <div class="cert-signature-line"></div>
-                                    <div class="cert-signature-name">_________________</div>
-                                    <div class="cert-signature-title">Participant</div>
-                                </div>
                             </div>
 
                             <div class="cert-id" id="certIdDisplay">CRL-4829</div>
-                            <div class="cert-footer">cre8learn_institute@outlook.com &bull; +266 63608813</div>
 
-                            <!-- QR Code -->
                             <div class="cert-qr" id="qrContainer">
                                 <img id="qrImg" src="" alt="QR" style="width:100%;height:100%;object-fit:contain;">
                             </div>
@@ -1264,14 +1194,13 @@
                 </div>
             </section>
 
-        </div><!-- /workspace -->
-    </div><!-- /app -->
+        </div>
+    </div>
 
     <script>
         (function() {
             'use strict';
 
-            // ---------- DOM refs ----------
             const recipientInput = document.getElementById('recipientName');
             const recipientDisplay = document.getElementById('recipientDisplay');
             const courseSelect = document.getElementById('courseSelect');
@@ -1309,14 +1238,12 @@
             const zoomInBtn = document.getElementById('zoomInBtn');
             const zoomOutBtn = document.getElementById('zoomOutBtn');
             const resetZoomBtn = document.getElementById('resetZoomBtn');
-            const certWrapper = document.getElementById('certWrapper');
             const qrImg = document.getElementById('qrImg');
             const toast = document.getElementById('toast');
             const toastMsg = document.getElementById('toastMessage');
 
             let toastTimer = null;
 
-            // ---------- State ----------
             let currentTemplate = 'classic';
             let currentColor = '#0f3b2e';
             let signatureDataUrl = null;
@@ -1324,7 +1251,6 @@
             let zoomLevel = 1;
             let history = JSON.parse(localStorage.getItem('cre8learn_history') || '[]');
 
-            // ---------- Helpers ----------
             function showToast(msg, icon = 'fa-check-circle', color = '#4ade80') {
                 toastMsg.textContent = msg;
                 const iconEl = toast.querySelector('i');
@@ -1359,7 +1285,6 @@
                 return `${y}-${m}-${day}`;
             }
 
-            // ---------- QR Code ----------
             function updateQR() {
                 const name = recipientDisplay.textContent.trim() || 'Recipient';
                 const course = courseDisplay.textContent.trim() || 'Course';
@@ -1372,17 +1297,13 @@
                 qrImg.src = url;
             }
 
-            // ---------- Render Certificate ----------
             function render() {
-                // Name
                 let name = recipientInput.value.trim();
                 if (!name) name = '[Recipient]';
                 recipientDisplay.textContent = name;
 
-                // Course
                 courseDisplay.textContent = courseSelect.value;
 
-                // Date
                 let dateVal = dateInput.value;
                 let formatted = formatDate(dateVal);
                 if (!formatted) {
@@ -1392,49 +1313,31 @@
                 }
                 dateDisplay.textContent = formatted || 'March 15, 2026';
 
-                // Duration
                 durationDisplay.textContent = durationSelect.value;
 
-                // Cert ID
                 const id = generateCertId();
                 certIdInput.value = id;
                 certIdDisplay.textContent = id;
 
-                // Template
                 certificateEl.className = `template-${currentTemplate}`;
 
-                // Accent color — apply to dynamic elements
-                const accentEls = [
-                    document.querySelector('.cert-title'),
-                    document.querySelector('.cert-sub'),
-                    document.querySelector('.cert-course'),
-                    document.querySelector('.cert-logo'),
-                ];
-                // Only override if not using a template that has fixed colors
-                // We'll use CSS custom properties approach: set a data attribute
                 certificateEl.style.setProperty('--accent-color', currentColor);
-                // Also apply to specific elements via style
                 const title = document.getElementById('certTitleDisplay');
                 const sub = document.getElementById('certSubDisplay');
                 const course = document.getElementById('courseDisplay');
                 const logo = document.getElementById('logoText');
-                // For classic/modern we want to use the color, but for elegant it's gold, etc.
-                // We'll apply conditionally based on template
                 if (currentTemplate === 'classic' || currentTemplate === 'modern' || currentTemplate === 'minimal') {
                     title.style.color = currentColor;
                     sub.style.color = currentColor;
                     course.style.color = currentColor;
                     logo.style.color = currentColor;
                 } else {
-                    // For elegant, keep gold but we can still apply to some elements
-                    // We'll let the CSS handle it
                     title.style.color = '';
                     sub.style.color = '';
                     course.style.color = '';
                     logo.style.color = '';
                 }
 
-                // Signature
                 if (signatureDataUrl) {
                     signaturePreview.src = signatureDataUrl;
                     signaturePreview.style.display = 'inline-block';
@@ -1444,7 +1347,6 @@
                     sigLine.style.display = 'block';
                 }
 
-                // Logo
                 if (logoDataUrl) {
                     logoPreview.src = logoDataUrl;
                     logoPreview.style.display = 'inline-block';
@@ -1454,15 +1356,12 @@
                     logoText.style.display = 'block';
                 }
 
-                // QR
                 updateQR();
 
-                // Zoom
                 certificateEl.style.transform = `scale(${zoomLevel})`;
                 certificateEl.style.transformOrigin = 'center center';
             }
 
-            // ---------- File handlers ----------
             function handleSignatureFile(file) {
                 if (!file) return;
                 const reader = new FileReader();
@@ -1487,7 +1386,6 @@
                 reader.readAsDataURL(file);
             }
 
-            // ---------- Download ----------
             async function downloadPDF() {
                 const btn = downloadPdfBtn;
                 const orig = btn.innerHTML;
@@ -1538,7 +1436,6 @@
                 btn.disabled = false;
             }
 
-            // ---------- History ----------
             function saveHistory() {
                 const entry = {
                     name: recipientInput.value.trim() || 'Unnamed',
@@ -1573,7 +1470,6 @@
                 signatureDataUrl = latest.signature || null;
                 logoDataUrl = latest.logo || null;
 
-                // Update UI
                 templateOptions.forEach(el => {
                     el.classList.toggle('active', el.dataset.template === currentTemplate);
                 });
@@ -1595,7 +1491,6 @@
                 showToast('Loaded latest certificate', 'fa-history', '#8b5cf6');
             }
 
-            // ---------- Reset ----------
             function resetAll() {
                 recipientInput.value = 'Lerato Mokoena';
                 courseSelect.value = 'Cybersecurity Awareness Workshop';
@@ -1627,21 +1522,17 @@
                 showToast('Reset to default', 'fa-undo-alt', '#64748b');
             }
 
-            // ---------- Zoom ----------
             function applyZoom() {
                 certificateEl.style.transform = `scale(${zoomLevel})`;
                 certificateEl.style.transformOrigin = 'center center';
             }
 
-            // ---------- Events ----------
-            // Inputs
             recipientInput.addEventListener('input', render);
             courseSelect.addEventListener('change', render);
             dateInput.addEventListener('change', render);
             durationSelect.addEventListener('change', render);
             updateBtn.addEventListener('click', render);
 
-            // Template
             templateOptions.forEach(el => {
                 el.addEventListener('click', function() {
                     templateOptions.forEach(o => o.classList.remove('active'));
@@ -1652,7 +1543,6 @@
                 });
             });
 
-            // Color
             colorSwatches.forEach(el => {
                 el.addEventListener('click', function() {
                     colorSwatches.forEach(c => c.classList.remove('active'));
@@ -1662,7 +1552,6 @@
                 });
             });
 
-            // Signature upload
             sigFileInput.addEventListener('change', (e) => {
                 if (e.target.files.length) handleSignatureFile(e.target.files[0]);
             });
@@ -1675,7 +1564,6 @@
                 if (e.dataTransfer.files.length) handleSignatureFile(e.dataTransfer.files[0]);
             });
 
-            // Logo upload
             logoFileInput.addEventListener('change', (e) => {
                 if (e.target.files.length) handleLogoFile(e.target.files[0]);
             });
@@ -1688,7 +1576,6 @@
                 if (e.dataTransfer.files.length) handleLogoFile(e.dataTransfer.files[0]);
             });
 
-            // Buttons
             downloadPdfBtn.addEventListener('click', downloadPDF);
             downloadPngBtn.addEventListener('click', downloadPNG);
             printBtn.addEventListener('click', () => window.print());
@@ -1696,7 +1583,6 @@
             saveHistoryBtn.addEventListener('click', saveHistory);
             loadHistoryBtn.addEventListener('click', loadHistory);
 
-            // Zoom
             zoomInBtn.addEventListener('click', () => { zoomLevel = Math.min(zoomLevel + 0.1, 1.8);
                 applyZoom(); });
             zoomOutBtn.addEventListener('click', () => { zoomLevel = Math.max(zoomLevel - 0.1, 0.5);
@@ -1705,26 +1591,18 @@
                 applyZoom();
                 showToast('Zoom reset', 'fa-undo-alt', '#64748b'); });
 
-            // ---------- Init ----------
             function init() {
-                // Set default date
                 if (!dateInput.value) dateInput.value = getTodayStr();
-                // Set default template active
                 document.querySelector('.template-option[data-template="classic"]')?.classList.add('active');
-                // Set default color active
                 document.querySelector('.color-swatch[data-color="#0f3b2e"]')?.classList.add('active');
-                // Generate initial ID
                 const id = generateCertId();
                 certIdInput.value = id;
                 certIdDisplay.textContent = id;
-                // Render
                 render();
                 showToast('Ready — customize your certificate', 'fa-check-circle', '#4ade80');
             }
 
             init();
-
-            window.addEventListener('resize', () => { /* no-op, but keep */ });
 
         })();
     </script>

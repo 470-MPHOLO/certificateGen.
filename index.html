@@ -234,6 +234,10 @@
             box-shadow: 0 0 0 4px var(--primary-glow);
         }
 
+        .control-input::placeholder {
+            color: #adb5bd;
+        }
+
         .control-select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
@@ -1039,20 +1043,19 @@
                 </div>
 
                 <div class="control-section">
+                    <label class="control-label"><i class="fas fa-graduation-cap"></i> Course / Workshop</label>
+                    <input class="control-input" id="courseInput" placeholder="e.g. Advanced Cybersecurity" value="Cybersecurity Awareness Workshop">
+                </div>
+
+                <div class="control-section">
                     <div class="row-2">
-                        <div>
-                            <label class="control-label"><i class="fas fa-graduation-cap"></i> Course</label>
-                            <select class="control-select" id="courseSelect">
-                                <option value="Cybersecurity Awareness Workshop">Cybersecurity Awareness Workshop</option>
-                                <option value="Introduction to Programming &amp; Computational Thinking">Intro to Programming</option>
-                                <option value="Professional Document Lab">Professional Document Lab</option>
-                                <option value="Advanced Cybersecurity Practitioner">Advanced Cybersecurity Practitioner</option>
-                                <option value="Data Science Fundamentals">Data Science Fundamentals</option>
-                            </select>
-                        </div>
                         <div>
                             <label class="control-label"><i class="fas fa-calendar-alt"></i> Date</label>
                             <input class="control-input" type="date" id="completionDate">
+                        </div>
+                        <div>
+                            <label class="control-label"><i class="fas fa-clock"></i> Duration</label>
+                            <input class="control-input" id="durationInput" placeholder="e.g. 2 Days" value="2 Days">
                         </div>
                     </div>
                 </div>
@@ -1060,20 +1063,19 @@
                 <div class="control-section">
                     <div class="row-2">
                         <div>
-                            <label class="control-label"><i class="fas fa-clock"></i> Duration</label>
-                            <select class="control-select" id="durationSelect">
-                                <option value="2 Days">2 Days</option>
-                                <option value="6 Weeks">6 Weeks</option>
-                                <option value="3 Months">3 Months</option>
-                                <option value="1 Day">1 Day</option>
-                                <option value="8 Weeks">8 Weeks</option>
-                            </select>
+                            <label class="control-label"><i class="fas fa-signature"></i> Instructor Name</label>
+                            <input class="control-input" id="instructorName" placeholder="e.g. Teboho Mpholo" value="Teboho Mpholo">
                         </div>
                         <div>
-                            <label class="control-label"><i class="fas fa-hashtag"></i> Certificate ID</label>
-                            <input class="control-input" id="certIdInput" placeholder="Auto-generated" readonly style="background:#f1f3f5;cursor:default;">
+                            <label class="control-label"><i class="fas fa-briefcase"></i> Instructor Title</label>
+                            <input class="control-input" id="instructorTitle" placeholder="e.g. Founder & Instructor" value="Founder & Instructor">
                         </div>
                     </div>
+                </div>
+
+                <div class="control-section">
+                    <label class="control-label"><i class="fas fa-hashtag"></i> Certificate ID</label>
+                    <input class="control-input" id="certIdInput" placeholder="Auto-generated" readonly style="background:#f1f3f5;cursor:default;">
                 </div>
 
                 <div class="control-section">
@@ -1173,8 +1175,8 @@
                                 <div class="cert-signature-block">
                                     <img id="signaturePreview" class="cert-signature-img" alt="Signature">
                                     <div class="cert-signature-line" id="sigLine"></div>
-                                    <div class="cert-signature-name">Teboho Mpholo</div>
-                                    <div class="cert-signature-title">Founder &amp; Instructor</div>
+                                    <div class="cert-signature-name" id="certSignatureName">Teboho Mpholo</div>
+                                    <div class="cert-signature-title" id="certSignatureTitle">Founder & Instructor</div>
                                 </div>
                             </div>
 
@@ -1203,14 +1205,18 @@
 
             const recipientInput = document.getElementById('recipientName');
             const recipientDisplay = document.getElementById('recipientDisplay');
-            const courseSelect = document.getElementById('courseSelect');
+            const courseInput = document.getElementById('courseInput');
             const courseDisplay = document.getElementById('courseDisplay');
             const dateInput = document.getElementById('completionDate');
             const dateDisplay = document.getElementById('dateDisplay');
-            const durationSelect = document.getElementById('durationSelect');
+            const durationInput = document.getElementById('durationInput');
             const durationDisplay = document.getElementById('durationDisplay');
             const certIdInput = document.getElementById('certIdInput');
             const certIdDisplay = document.getElementById('certIdDisplay');
+            const instructorNameInput = document.getElementById('instructorName');
+            const instructorTitleInput = document.getElementById('instructorTitle');
+            const certSignatureName = document.getElementById('certSignatureName');
+            const certSignatureTitle = document.getElementById('certSignatureTitle');
 
             const templateOptions = document.querySelectorAll('.template-option');
             const certificateEl = document.getElementById('certificate');
@@ -1302,7 +1308,7 @@
                 if (!name) name = '[Recipient]';
                 recipientDisplay.textContent = name;
 
-                courseDisplay.textContent = courseSelect.value;
+                courseDisplay.textContent = courseInput.value || 'Course';
 
                 let dateVal = dateInput.value;
                 let formatted = formatDate(dateVal);
@@ -1313,7 +1319,10 @@
                 }
                 dateDisplay.textContent = formatted || 'March 15, 2026';
 
-                durationDisplay.textContent = durationSelect.value;
+                durationDisplay.textContent = durationInput.value || 'Duration';
+
+                certSignatureName.textContent = instructorNameInput.value || 'Instructor';
+                certSignatureTitle.textContent = instructorTitleInput.value || 'Title';
 
                 const id = generateCertId();
                 certIdInput.value = id;
@@ -1439,9 +1448,11 @@
             function saveHistory() {
                 const entry = {
                     name: recipientInput.value.trim() || 'Unnamed',
-                    course: courseSelect.value,
+                    course: courseInput.value,
                     date: dateInput.value,
-                    duration: durationSelect.value,
+                    duration: durationInput.value,
+                    instructorName: instructorNameInput.value,
+                    instructorTitle: instructorTitleInput.value,
                     template: currentTemplate,
                     color: currentColor,
                     signature: signatureDataUrl || null,
@@ -1462,9 +1473,11 @@
                 }
                 const latest = history[0];
                 recipientInput.value = latest.name || '';
-                courseSelect.value = latest.course || 'Cybersecurity Awareness Workshop';
+                courseInput.value = latest.course || 'Cybersecurity Awareness Workshop';
                 dateInput.value = latest.date || getTodayStr();
-                durationSelect.value = latest.duration || '2 Days';
+                durationInput.value = latest.duration || '2 Days';
+                instructorNameInput.value = latest.instructorName || 'Teboho Mpholo';
+                instructorTitleInput.value = latest.instructorTitle || 'Founder & Instructor';
                 currentTemplate = latest.template || 'classic';
                 currentColor = latest.color || '#0f3b2e';
                 signatureDataUrl = latest.signature || null;
@@ -1493,9 +1506,11 @@
 
             function resetAll() {
                 recipientInput.value = 'Lerato Mokoena';
-                courseSelect.value = 'Cybersecurity Awareness Workshop';
+                courseInput.value = 'Cybersecurity Awareness Workshop';
                 dateInput.value = getTodayStr();
-                durationSelect.value = '2 Days';
+                durationInput.value = '2 Days';
+                instructorNameInput.value = 'Teboho Mpholo';
+                instructorTitleInput.value = 'Founder & Instructor';
                 currentTemplate = 'classic';
                 currentColor = '#0f3b2e';
                 signatureDataUrl = null;
@@ -1528,9 +1543,11 @@
             }
 
             recipientInput.addEventListener('input', render);
-            courseSelect.addEventListener('change', render);
+            courseInput.addEventListener('input', render);
             dateInput.addEventListener('change', render);
-            durationSelect.addEventListener('change', render);
+            durationInput.addEventListener('input', render);
+            instructorNameInput.addEventListener('input', render);
+            instructorTitleInput.addEventListener('input', render);
             updateBtn.addEventListener('click', render);
 
             templateOptions.forEach(el => {

@@ -825,9 +825,9 @@
             position: absolute;
             bottom: 16px;
             right: 20px;
-            width: 48px;
-            height: 48px;
-            opacity: 0.6;
+            width: 56px;
+            height: 56px;
+            opacity: 0.7;
         }
 
         .cert-qr img {
@@ -960,8 +960,8 @@
                 justify-content: center;
             }
             .cert-qr {
-                width: 36px;
-                height: 36px;
+                width: 40px;
+                height: 40px;
                 bottom: 12px;
                 right: 14px;
             }
@@ -1289,9 +1289,12 @@
                 const id = certIdDisplay.textContent.trim() || 'ID';
                 const payload = `Cre8learn Certificate\nName: ${name}\nCourse: ${course}\nDate: ${date}\nID: ${id}`;
                 const encoded = encodeURIComponent(payload);
+                // Use larger size for better scannability
                 const url =
-                    `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encoded}&bgcolor=ffffff&color=222222&margin=8`;
+                    `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encoded}&bgcolor=ffffff&color=222222&margin=12&format=png`;
                 qrImg.src = url;
+                // Ensure image reloads
+                qrImg.onload = () => {};
             }
 
             function render() {
@@ -1393,32 +1396,44 @@
                 btn.disabled = true;
                 try {
                     const element = document.getElementById('certificate');
-                    // Temporarily remove zoom transform to capture full element
+                    // Save current transform
                     const originalTransform = element.style.transform;
                     const originalOrigin = element.style.transformOrigin;
+                    // Remove zoom for clean capture
                     element.style.transform = 'none';
                     element.style.transformOrigin = 'center center';
-                    // Wait for reflow
-                    await new Promise(r => setTimeout(r, 50));
+                    // Force reflow
+                    await new Promise(r => setTimeout(r, 100));
+
+                    // Ensure QR code is fully loaded
+                    await new Promise((resolve) => {
+                        const qr = document.getElementById('qrImg');
+                        if (qr.complete) resolve();
+                        else qr.onload = resolve;
+                        setTimeout(resolve, 1000);
+                    });
 
                     const canvas = await html2canvas(element, {
-                        scale: 3,
+                        scale: 4,
                         backgroundColor: '#ffffff',
                         useCORS: true,
                         logging: false,
                         width: element.scrollWidth,
-                        height: element.scrollHeight
+                        height: element.scrollHeight,
+                        onclone: (clonedDoc) => {
+                            // Ensure QR code is visible in clone
+                        }
                     });
                     // Restore transform
                     element.style.transform = originalTransform;
                     element.style.transformOrigin = originalOrigin;
 
-                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF('landscape', 'in', 'a4');
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     const pdfHeight = pdf.internal.pageSize.getHeight();
-                    const margin = 0.3;
+                    const margin = 0.25;
                     const maxWidth = pdfWidth - 2 * margin;
                     const maxHeight = pdfHeight - 2 * margin;
                     const imgAspect = canvas.width / canvas.height;
@@ -1448,15 +1463,22 @@
                 btn.disabled = true;
                 try {
                     const el = document.getElementById('certificate');
-                    // Same fix for PNG: remove transform
                     const originalTransform = el.style.transform;
                     const originalOrigin = el.style.transformOrigin;
                     el.style.transform = 'none';
                     el.style.transformOrigin = 'center center';
-                    await new Promise(r => setTimeout(r, 50));
+                    await new Promise(r => setTimeout(r, 100));
+
+                    // Ensure QR is loaded
+                    await new Promise((resolve) => {
+                        const qr = document.getElementById('qrImg');
+                        if (qr.complete) resolve();
+                        else qr.onload = resolve;
+                        setTimeout(resolve, 1000);
+                    });
 
                     const canvas = await html2canvas(el, {
-                        scale: 3,
+                        scale: 4,
                         backgroundColor: '#ffffff',
                         useCORS: true,
                         logging: false,
@@ -1650,6 +1672,8 @@
                 certIdInput.value = id;
                 certIdDisplay.textContent = id;
                 render();
+                // Ensure QR is loaded after a moment
+                setTimeout(updateQR, 200);
                 showToast('Ready — customize your certificate', 'fa-check-circle', '#4ade80');
             }
 

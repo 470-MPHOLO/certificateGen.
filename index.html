@@ -702,22 +702,18 @@
             flex-direction: column;
             background: transparent;
         }
-        /* Logo sits on its own card so any uploaded logo (light or dark) stays
-           legible. On dark tones this is a white card; on light tones (white/
-           grey) the card becomes transparent since the page is already light. */
+        /* No background box behind the logo — it renders exactly as uploaded,
+           with no interference. A white/light logo directly on navy is a
+           normal, expected look (e.g. a university crest), so we don't force
+           a card behind it. */
         .template-navy #logoBackground {
-            background: var(--nv-logo-card, #ffffff);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 6px 18px;
-            border-radius: 6px;
-            min-height: 44px;
-            box-shadow: var(--nv-logo-shadow, 0 2px 10px rgba(0, 0, 0, 0.25));
             align-self: center;
         }
         .template-navy .cert-logo {
-            color: var(--nv-logo-text, #123a58);
+            color: var(--nv-text, #ffffff);
             font-weight: 700;
         }
         .template-navy .cert-title {
@@ -1433,9 +1429,10 @@
             }
 
             // Sets the --nv-* custom properties consumed by the .template-navy
-            // CSS rules, so the Background Tone picker can drive both the card
-            // color and readable text contrast (light text on dark tones,
-            // dark text on white/light-grey tones), plus the logo card style.
+            // CSS rules, so the Background Tone picker can drive readable text
+            // contrast (light text on dark tones, dark text on white/light-grey
+            // tones). The logo itself is left untouched — no background box,
+            // no color changes — it renders exactly as uploaded.
             function applyNavyBackground() {
                 certificateEl.style.setProperty('--nv-bg', currentBgTone);
                 if (currentBgScheme === 'light') {
@@ -1444,20 +1441,12 @@
                     certificateEl.style.setProperty('--nv-text-soft', 'rgba(255, 255, 255, 0.62)');
                     certificateEl.style.setProperty('--nv-border', 'rgba(255, 255, 255, 0.2)');
                     certificateEl.style.setProperty('--nv-border-soft', 'rgba(255, 255, 255, 0.08)');
-                    certificateEl.style.setProperty('--nv-logo-card', '#ffffff');
-                    certificateEl.style.setProperty('--nv-logo-text', currentBgTone);
-                    certificateEl.style.setProperty('--nv-logo-shadow', '0 2px 10px rgba(0, 0, 0, 0.25)');
                 } else {
-                    // Light background tone (white / light grey) -> dark text,
-                    // and the logo card becomes transparent since the page is
-                    // already light (no need for a white card-on-white-card).
+                    // Light background tone (white / light grey) -> dark text
                     certificateEl.style.setProperty('--nv-text', '#16232d');
                     certificateEl.style.setProperty('--nv-text-soft', 'rgba(22, 35, 45, 0.62)');
                     certificateEl.style.setProperty('--nv-border', 'rgba(22, 35, 45, 0.18)');
                     certificateEl.style.setProperty('--nv-border-soft', 'rgba(22, 35, 45, 0.08)');
-                    certificateEl.style.setProperty('--nv-logo-card', 'transparent');
-                    certificateEl.style.setProperty('--nv-logo-text', '#16232d');
-                    certificateEl.style.setProperty('--nv-logo-shadow', 'none');
                 }
             }
 

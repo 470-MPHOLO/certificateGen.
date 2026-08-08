@@ -1,586 +1,676 @@
-(function() {
-    'use strict';
+/* ============================================
+   CSS VARIABLES
+   ============================================ */
+:root {
+    /* Light Theme - Professional */
+    --bg-primary: #f0f2f5;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --text-primary: #1a1a2e;
+    --text-secondary: #2d2d3f;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
+    --border-hover: #9ca3af;
+    --accent: #1a5276;
+    --accent-light: #2e86c1;
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 30px 80px rgba(0, 0, 0, 0.12);
+    --radius: 16px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Fonts */
+    --font-serif: 'Playfair Display', 'Times New Roman', serif;
+    --font-serif-alt: 'Cormorant Garamond', 'Georgia', serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
 
-    // ============================================
-    // DOM REFS
-    // ============================================
-    const recipientInput = document.getElementById('recipientName');
-    const recipientDisplay = document.getElementById('recipientDisplay');
-    const courseInput = document.getElementById('courseInput');
-    const courseDisplay = document.getElementById('courseDisplay');
-    const dateInput = document.getElementById('completionDate');
-    const dateDisplay = document.getElementById('dateDisplay');
-    const durationInput = document.getElementById('durationInput');
-    const durationDisplay = document.getElementById('durationDisplay');
-    const certIdInput = document.getElementById('certIdInput');
-    const certIdDisplay = document.getElementById('certIdDisplay');
-    const instructorNameInput = document.getElementById('instructorName');
-    const instructorTitleInput = document.getElementById('instructorTitle');
-    const instituteNameInput = document.getElementById('instituteName');
-    const certSignatureName = document.getElementById('certSignatureName');
-    const certSignatureTitle = document.getElementById('certSignatureTitle');
-    const templateOptions = document.querySelectorAll('.template-option');
-    const certificateEl = document.getElementById('certificate');
-    const colorSwatches = document.querySelectorAll('.color-swatch');
-    const sigFileInput = document.getElementById('sigFileInput');
-    const sigFileName = document.getElementById('sigFileName');
-    const sigUploadZone = document.getElementById('sigUploadZone');
-    const signaturePreview = document.getElementById('signaturePreview');
-    const sigLine = document.getElementById('sigLine');
-    const logoFileInput = document.getElementById('logoFileInput');
-    const logoFileName = document.getElementById('logoFileName');
-    const logoUploadZone = document.getElementById('logoUploadZone');
-    const logoPreview = document.getElementById('logoPreview');
-    const logoText = document.getElementById('logoText');
-    const updateBtn = document.getElementById('updateBtn');
-    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-    const downloadPngBtn = document.getElementById('downloadPngBtn');
-    const printBtn = document.getElementById('printBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const saveHistoryBtn = document.getElementById('saveHistoryBtn');
-    const loadHistoryBtn = document.getElementById('loadHistoryBtn');
-    const previewBtn = document.getElementById('previewBtn');
-    const blockchainBtn = document.getElementById('blockchainBtn');
-    const zoomInBtn = document.getElementById('zoomInBtn');
-    const zoomOutBtn = document.getElementById('zoomOutBtn');
-    const resetZoomBtn = document.getElementById('resetZoomBtn');
-    const qrContainer = document.getElementById('qrContainer');
-    const toast = document.getElementById('toast');
-    const toastMsg = document.getElementById('toastMessage');
+/* Dark Theme - Toggle via class */
+body.dark-theme {
+    --bg-primary: #0a1922;
+    --bg-secondary: #0d2130;
+    --bg-card: rgba(255, 255, 255, 0.05);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
 
-    // ============================================
-    // STATE
-    // ============================================
-    let toastTimer = null;
-    let currentTemplate = 'oxford';
-    let currentColor = '#FFD700';
-    let signatureDataUrl = null;
-    let logoDataUrl = null;
-    let zoomLevel = 1;
-    let history = JSON.parse(localStorage.getItem('cre8learn_elite_history') || '[]');
-    let qrCodeInstance = null;
+/* ============================================
+   RESET & BASE
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    // ============================================
-    // UTILITY FUNCTIONS
-    // ============================================
-    function showToast(msg, icon = 'fa-check-circle', color = '#FFD700') {
-        toastMsg.textContent = msg;
-        const iconEl = toast.querySelector('i');
-        iconEl.className = `fas ${icon}`;
-        iconEl.style.color = color;
-        toast.classList.add('show');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+body {
+    font-family: var(--font-sans);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    line-height: 1.6;
+    transition: background 0.3s ease;
+}
+
+.app {
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 24px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--accent);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.brand h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.brand h1 span {
+    color: var(--accent);
+}
+
+.brand-badge {
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-left: 4px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+}
+
+.header-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg-primary);
+}
+
+/* ============================================
+   WORKSPACE
+   ============================================ */
+.workspace {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .workspace {
+        grid-template-columns: 1fr;
     }
+}
 
-    function generateCertId() {
-        const prefix = 'CRL-';
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let id = '';
-        for (let i = 0; i < 6; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return prefix + id;
-    }
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.sidebar {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    padding: 28px 24px;
+    position: sticky;
+    top: 24px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+}
 
-    function formatDate(dateStr) {
-        if (!dateStr) return null;
-        const d = new Date(dateStr + 'T00:00:00');
-        if (isNaN(d.getTime())) return null;
-        return d.toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-        });
-    }
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+}
 
-    function getTodayStr() {
-        const d = new Date();
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${y}-${m}-${day}`;
-    }
+.sidebar-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-    // ============================================
-    // QR CODE GENERATION
-    // ============================================
-    function updateQR() {
-        const name = recipientDisplay.textContent.trim() || 'Recipient';
-        const course = courseDisplay.textContent.trim() || 'Course';
-        const institute = instituteNameInput.value.trim() || 'Institute';
-        const certId = certIdDisplay.textContent.trim();
-        
-        const payload = JSON.stringify({
-            institute: institute,
-            recipient: name,
-            course: course,
-            certificateId: certId,
-            issued: dateDisplay.textContent,
-            verified: true
-        });
+.control-section {
+    margin-bottom: 20px;
+}
 
-        try {
-            if (typeof QRCode === 'undefined') { 
-                qrContainer.innerHTML = '<div style="font-size:0.5rem;color:#999;">QR</div>'; 
-                return; 
-            }
-            qrContainer.innerHTML = '';
-            qrCodeInstance = new QRCode(qrContainer, {
-                text: payload,
-                width: 200,
-                height: 200,
-                colorDark: '#000000',
-                colorLight: '#ffffff',
-                correctLevel: QRCode.CorrectLevel.H // High error correction
-            });
-        } catch (err) {
-            console.error('QR generation failed:', err);
-            qrContainer.innerHTML = '';
-        }
-    }
+.control-section.client-settings {
+    background: rgba(var(--accent-rgb, 26, 82, 118), 0.05);
+    padding: 12px 14px;
+    border-radius: 10px;
+    border-left: 3px solid var(--accent);
+}
 
-    // ============================================
-    // MAIN RENDER FUNCTION
-    // ============================================
-    function render() {
-        // Recipient
-        let name = recipientInput.value.trim() || '[Recipient]';
-        recipientDisplay.textContent = name;
+.control-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+}
 
-        // Course
-        courseDisplay.textContent = courseInput.value || 'Course';
+.control-label i {
+    color: var(--accent);
+    font-size: 0.8rem;
+    width: 18px;
+}
 
-        // Date
-        let dateVal = dateInput.value;
-        let formatted = formatDate(dateVal);
-        if (!formatted) {
-            const today = getTodayStr();
-            dateInput.value = today;
-            formatted = formatDate(today);
-        }
-        dateDisplay.textContent = formatted || 'Date';
+.control-hint {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    padding-left: 26px;
+}
 
-        // Duration
-        durationDisplay.textContent = durationInput.value || 'Duration';
+.control-input,
+.control-select {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--bg-secondary);
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    transition: var(--transition);
+    outline: none;
+}
 
-        // Institute Name
-        logoText.textContent = (instituteNameInput.value || 'Institute').toUpperCase();
+.control-input:focus,
+.control-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(26, 82, 118, 0.1);
+}
 
-        // Instructor
-        certSignatureName.textContent = instructorNameInput.value || 'Instructor';
-        certSignatureTitle.textContent = instructorTitleInput.value || 'Title';
+.control-input::placeholder {
+    color: var(--text-muted);
+}
 
-        // Certificate ID
-        const id = generateCertId();
-        certIdInput.value = id;
-        certIdDisplay.textContent = id;
+.control-input[readonly] {
+    background: var(--bg-primary);
+    cursor: default;
+}
 
-        // Template
-        certificateEl.className = `template-${currentTemplate}`;
+.row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
 
-        // Apply Accent Color
-        const title = document.getElementById('certTitleDisplay');
-        const sub = document.getElementById('certSubDisplay');
-        const course = document.getElementById('courseDisplay');
-        const logo = document.getElementById('logoText');
-        
-        // Set accent color for elements
-        const accentElements = [title, sub, course, logo];
-        accentElements.forEach(el => {
-            if (el) {
-                el.style.color = currentColor;
-            }
-        });
+/* ============================================
+   UPLOAD ZONE
+   ============================================ */
+.upload-zone {
+    border: 2px dashed var(--border-color);
+    border-radius: 10px;
+    padding: 16px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--bg-primary);
+    position: relative;
+}
 
-        // Signature
-        if (signatureDataUrl) {
-            signaturePreview.src = signatureDataUrl;
-            signaturePreview.style.display = 'inline-block';
-            sigLine.style.display = 'none';
-        } else {
-            signaturePreview.style.display = 'none';
-            sigLine.style.display = 'block';
-        }
+.upload-zone:hover {
+    border-color: var(--accent);
+    background: rgba(26, 82, 118, 0.05);
+}
 
-        // Logo
-        if (logoDataUrl) {
-            logoPreview.src = logoDataUrl;
-            logoPreview.style.display = 'inline-block';
-            logoText.style.display = 'none';
-        } else {
-            logoPreview.style.display = 'none';
-            logoText.style.display = 'block';
-        }
+.upload-zone.dragover {
+    border-color: var(--accent);
+    background: rgba(26, 82, 118, 0.08);
+    box-shadow: 0 0 0 4px rgba(26, 82, 118, 0.1);
+}
 
-        // QR Code
-        updateQR();
+.upload-zone i {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+}
 
-        // Zoom
-        certificateEl.style.transform = `scale(${zoomLevel})`;
-        certificateEl.style.transformOrigin = 'center center';
-    }
+.upload-zone span {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: block;
+}
 
-    // ============================================
-    // FILE HANDLING
-    // ============================================
-    function handleSignatureFile(file) {
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => { 
-            signatureDataUrl = e.target.result; 
-            sigFileName.textContent = file.name; 
-            render(); 
-            showToast('Signature uploaded successfully', 'fa-check-circle', '#FFD700');
-        };
-        reader.readAsDataURL(file);
-    }
+.upload-zone .file-name {
+    font-size: 0.65rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-top: 4px;
+    word-break: break-all;
+}
 
-    function handleLogoFile(file) {
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => { 
-            logoDataUrl = e.target.result; 
-            logoFileName.textContent = file.name; 
-            render(); 
-            showToast('Logo uploaded successfully', 'fa-check-circle', '#FFD700');
-        };
-        reader.readAsDataURL(file);
-    }
+.upload-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
 
-    // ============================================
-    // EXPORT FUNCTIONS
-    // ============================================
-    async function downloadPDF() {
-        const btn = downloadPdfBtn;
-        const orig = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-        btn.disabled = true;
-        
-        try {
-            const element = document.getElementById('certificate');
-            const originalTransform = element.style.transform;
-            const originalOrigin = element.style.transformOrigin;
-            element.style.transform = 'none';
-            element.style.transformOrigin = 'center center';
-            await new Promise(r => setTimeout(r, 100));
+/* ============================================
+   TEMPLATE GRID
+   ============================================ */
+.template-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 4px;
+}
 
-            const canvas = await html2canvas(element, {
-                scale: 4,
-                backgroundColor: '#ffffff',
-                useCORS: true,
-                logging: false,
-                width: element.scrollWidth,
-                height: element.scrollHeight
-            });
-            
-            element.style.transform = originalTransform;
-            element.style.transformOrigin = originalOrigin;
+.template-option {
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--bg-primary);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
 
-            const imgData = canvas.toDataURL('image/jpeg', 0.95);
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('landscape', 'in', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
-            const margin = 0.25;
-            const maxWidth = pdfWidth - 2 * margin;
-            const maxHeight = pdfHeight - 2 * margin;
-            const imgAspect = canvas.width / canvas.height;
-            let finalWidth = maxWidth;
-            let finalHeight = finalWidth / imgAspect;
-            if (finalHeight > maxHeight) {
-                finalHeight = maxHeight;
-                finalWidth = finalHeight * imgAspect;
-            }
-            const x = (pdfWidth - finalWidth) / 2;
-            const y = (pdfHeight - finalHeight) / 2;
-            pdf.addImage(imgData, 'JPEG', x, y, finalWidth, finalHeight);
-            pdf.save(`certificate_${recipientInput.value.trim() || 'recipient'}.pdf`);
-            showToast('PDF downloaded successfully!', 'fa-file-pdf', '#4ade80');
-        } catch (err) {
-            console.error(err);
-            showToast('PDF error: ' + err.message, 'fa-exclamation-triangle', '#ef4444');
-        }
-        btn.innerHTML = orig;
-        btn.disabled = false;
-    }
+.template-option i {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+    color: var(--text-muted);
+}
 
-    async function downloadPNG() {
-        const btn = downloadPngBtn;
-        const orig = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Rendering...';
-        btn.disabled = true;
-        
-        try {
-            const el = document.getElementById('certificate');
-            const originalTransform = el.style.transform;
-            const originalOrigin = el.style.transformOrigin;
-            el.style.transform = 'none';
-            el.style.transformOrigin = 'center center';
-            await new Promise(r => setTimeout(r, 100));
+.template-option:hover {
+    border-color: var(--accent);
+    background: rgba(26, 82, 118, 0.05);
+}
 
-            const canvas = await html2canvas(el, {
-                scale: 4,
-                backgroundColor: '#ffffff',
-                useCORS: true,
-                logging: false,
-                width: el.scrollWidth,
-                height: el.scrollHeight
-            });
-            
-            el.style.transform = originalTransform;
-            el.style.transformOrigin = originalOrigin;
+.template-option.active {
+    border-color: var(--accent);
+    background: rgba(26, 82, 118, 0.1);
+    color: var(--accent);
+}
 
-            const link = document.createElement('a');
-            link.download = `certificate_${recipientInput.value.trim() || 'recipient'}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            showToast('PNG downloaded successfully!', 'fa-image', '#3b82f6');
-        } catch (err) {
-            console.error(err);
-            showToast('PNG error: ' + err.message, 'fa-exclamation-triangle', '#ef4444');
-        }
-        btn.innerHTML = orig;
-        btn.disabled = false;
-    }
+.template-option.active i {
+    color: var(--accent);
+}
 
-    // ============================================
-    // HISTORY FUNCTIONS
-    // ============================================
-    function saveHistory() {
-        const entry = {
-            name: recipientInput.value.trim() || 'Unnamed',
-            course: courseInput.value,
-            date: dateInput.value,
-            duration: durationInput.value,
-            instituteName: instituteNameInput.value,
-            instructorName: instructorNameInput.value,
-            instructorTitle: instructorTitleInput.value,
-            template: currentTemplate,
-            color: currentColor,
-            signature: signatureDataUrl || null,
-            logo: logoDataUrl || null,
-            id: certIdDisplay.textContent,
-            timestamp: Date.now()
-        };
-        history.unshift(entry);
-        if (history.length > 50) history.pop();
-        localStorage.setItem('cre8learn_elite_history', JSON.stringify(history));
-        showToast('Certificate saved to history!', 'fa-save', '#8b5cf6');
-    }
+/* ============================================
+   COLOR SWATCHES
+   ============================================ */
+.color-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
 
-    function loadHistory() {
-        if (history.length === 0) { 
-            showToast('No saved certificates found', 'fa-info-circle', '#f59e0b'); 
-            return; 
-        }
-        const latest = history[0];
-        recipientInput.value = latest.name || '';
-        courseInput.value = latest.course || 'Executive Leadership Program';
-        dateInput.value = latest.date || getTodayStr();
-        durationInput.value = latest.duration || '6 Months';
-        instituteNameInput.value = latest.instituteName || 'University of Oxford';
-        instructorNameInput.value = latest.instructorName || 'Prof. James Miller';
-        instructorTitleInput.value = latest.instructorTitle || 'Dean of Faculty';
-        currentTemplate = latest.template || 'oxford';
-        currentColor = latest.color || '#FFD700';
-        signatureDataUrl = latest.signature || null;
-        logoDataUrl = latest.logo || null;
+.color-swatch {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
 
-        templateOptions.forEach(el => {
-            el.classList.toggle('active', el.dataset.template === currentTemplate);
-        });
-        colorSwatches.forEach(el => {
-            el.classList.toggle('active', el.dataset.color === currentColor);
-        });
-        sigFileName.textContent = signatureDataUrl ? 'Loaded from history' : 'No file selected';
-        logoFileName.textContent = logoDataUrl ? 'Loaded from history' : 'No file selected';
+.color-swatch:hover {
+    transform: scale(1.1);
+}
 
-        render();
-        showToast('Loaded latest certificate from history', 'fa-history', '#8b5cf6');
-    }
+.color-swatch.active {
+    border-color: var(--text-primary);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
 
-    // ============================================
-    // BLOCKCHAIN VERIFICATION (Simulated)
-    // ============================================
-    function verifyBlockchain() {
-        const certId = certIdDisplay.textContent;
-        const name = recipientDisplay.textContent;
-        const institute = instituteNameInput.value;
-        
-        showToast(
-            `🔗 Verified on Blockchain · ${institute} · ${name} · ID: ${certId}`,
-            'fa-shield-alt',
-            '#4ade80'
-        );
-        
-        // In production, this would call a smart contract
-        console.log('Blockchain verification:', { certId, name, institute });
-    }
+.color-swatch.active::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.7rem;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
 
-    // ============================================
-    // RESET FUNCTION
-    // ============================================
-    function resetAll() {
-        recipientInput.value = 'Dr. Sarah Johnson';
-        courseInput.value = 'Executive Leadership Program';
-        dateInput.value = getTodayStr();
-        durationInput.value = '6 Months';
-        instituteNameInput.value = 'University of Oxford';
-        instructorNameInput.value = 'Prof. James Miller';
-        instructorTitleInput.value = 'Dean of Faculty';
-        currentTemplate = 'oxford';
-        currentColor = '#FFD700';
-        signatureDataUrl = null;
-        logoDataUrl = null;
-        sigFileName.textContent = 'No file selected';
-        logoFileName.textContent = 'No file selected';
-        signaturePreview.style.display = 'none';
-        sigLine.style.display = 'block';
-        logoPreview.style.display = 'none';
-        logoText.style.display = 'block';
-        sigFileInput.value = '';
-        logoFileInput.value = '';
+/* ============================================
+   BUTTONS
+   ============================================ */
+.action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
 
-        templateOptions.forEach(el => {
-            el.classList.toggle('active', el.dataset.template === 'oxford');
-        });
-        colorSwatches.forEach(el => {
-            el.classList.toggle('active', el.dataset.color === '#FFD700');
-        });
+.action-bar.secondary {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 12px;
+}
 
-        zoomLevel = 1;
-        certificateEl.style.transform = 'scale(1)';
-        render();
-        showToast('Reset to default premium template', 'fa-undo-alt', '#64748b');
-    }
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    justify-content: center;
+}
 
-    // ============================================
-    // ZOOM FUNCTIONS
-    // ============================================
-    function applyZoom() {
-        certificateEl.style.transform = `scale(${zoomLevel})`;
-        certificateEl.style.transformOrigin = 'center center';
-    }
+.btn-primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(26, 82, 118, 0.2);
+}
 
-    // ============================================
-    // EVENT LISTENERS
-    // ============================================
-    // Input events
-    recipientInput.addEventListener('input', render);
-    courseInput.addEventListener('input', render);
-    dateInput.addEventListener('change', render);
-    durationInput.addEventListener('input', render);
-    instructorNameInput.addEventListener('input', render);
-    instructorTitleInput.addEventListener('input', render);
-    instituteNameInput.addEventListener('input', render);
-    updateBtn.addEventListener('click', render);
+.btn-success {
+    background: #0b5e42;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    justify-content: center;
+}
 
-    // Template selection
-    templateOptions.forEach(el => {
-        el.addEventListener('click', function() {
-            templateOptions.forEach(o => o.classList.remove('active'));
-            this.classList.add('active');
-            currentTemplate = this.dataset.template;
-            render();
-            showToast(`Template: ${this.textContent.trim()}`, 'fa-layer-group', '#3b82f6');
-        });
-    });
+.btn-success:hover {
+    background: #084f37;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(11, 94, 66, 0.2);
+}
 
-    // Color selection
-    colorSwatches.forEach(el => {
-        el.addEventListener('click', function() {
-            colorSwatches.forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            currentColor = this.dataset.color;
-            render();
-        });
-    });
+.btn-secondary {
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
 
-    // Signature upload
-    sigFileInput.addEventListener('change', (e) => {
-        if (e.target.files.length) handleSignatureFile(e.target.files[0]);
-    });
-    sigUploadZone.addEventListener('dragover', (e) => { 
-        e.preventDefault(); 
-        sigUploadZone.classList.add('dragover'); 
-    });
-    sigUploadZone.addEventListener('dragleave', () => { 
-        sigUploadZone.classList.remove('dragover'); 
-    });
-    sigUploadZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        sigUploadZone.classList.remove('dragover');
-        if (e.dataTransfer.files.length) handleSignatureFile(e.dataTransfer.files[0]);
-    });
+.btn-secondary:hover {
+    background: var(--bg-card);
+    border-color: var(--accent);
+}
 
-    // Logo upload
-    logoFileInput.addEventListener('change', (e) => {
-        if (e.target.files.length) handleLogoFile(e.target.files[0]);
-    });
-    logoUploadZone.addEventListener('dragover', (e) => { 
-        e.preventDefault(); 
-        logoUploadZone.classList.add('dragover'); 
-    });
-    logoUploadZone.addEventListener('dragleave', () => { 
-        logoUploadZone.classList.remove('dragover'); 
-    });
-    logoUploadZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        logoUploadZone.classList.remove('dragover');
-        if (e.dataTransfer.files.length) handleLogoFile(e.dataTransfer.files[0]);
-    });
+/* ============================================
+   VERIFICATION BADGE
+   ============================================ */
+.verification-badge {
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: rgba(26, 82, 118, 0.08);
+    border: 1px solid rgba(26, 82, 118, 0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    color: var(--accent);
+}
 
-    // Export buttons
-    downloadPdfBtn.addEventListener('click', downloadPDF);
-    downloadPngBtn.addEventListener('click', downloadPNG);
-    printBtn.addEventListener('click', () => window.print());
+/* ============================================
+   PREVIEW PANEL
+   ============================================ */
+.preview-panel {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+}
 
-    // History
-    saveHistoryBtn.addEventListener('click', saveHistory);
-    loadHistoryBtn.addEventListener('click', loadHistory);
+.preview-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
 
-    // Blockchain
-    blockchainBtn.addEventListener('click', verifyBlockchain);
+.preview-toolbar .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-    // Reset
-    resetBtn.addEventListener('click', resetAll);
+.toolbar-btn {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+}
 
-    // Preview
-    previewBtn.addEventListener('click', () => {
-        render();
-        showToast('Preview updated', 'fa-eye', '#3b82f6');
-    });
+.toolbar-btn:hover {
+    background: var(--bg-card);
+    border-color: var(--accent);
+}
 
-    // Zoom
-    zoomInBtn.addEventListener('click', () => { 
-        zoomLevel = Math.min(zoomLevel + 0.1, 1.8); 
-        applyZoom(); 
-    });
-    zoomOutBtn.addEventListener('click', () => { 
-        zoomLevel = Math.max(zoomLevel - 0.1, 0.5); 
-        applyZoom(); 
-    });
-    resetZoomBtn.addEventListener('click', () => { 
-        zoomLevel = 1; 
-        applyZoom(); 
-        showToast('Zoom reset', 'fa-undo-alt', '#64748b'); 
-    });
+/* ============================================
+   CERTIFICATE WRAPPER
+   ============================================ */
+.certificate-wrapper {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 480px;
+    position: relative;
+}
 
-    // ============================================
-    // INITIALIZATION
-    // ============================================
-    function init() {
-        if (!dateInput.value) dateInput.value = getTodayStr();
-        document.querySelector('.template-option[data-template="oxford"]')?.classList.add('active');
-        document.querySelector('.color-swatch[data-color="#FFD700"]')?.classList.add('active');
-        const id = generateCertId();
-        certIdInput.value = id;
-        certIdDisplay.textContent = id;
-        render();
-        showToast('🎓 Elite Certificate Generator Ready', 'fa-check-circle', '#FFD700');
-    }
+/* ============================================
+   CERTIFICATE STYLES
+   ============================================ */
+#certificate {
+    background: #ffffff;
+    width: 100%;
+    max-width: 780px;
+    aspect-ratio: 1.414 / 1;
+    padding: 36px 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
 
-    init();
+.cert-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    position: relative;
+}
 
-})();
+/* ============================================
+   TEMPLATE VARIANTS
+   ============================================ */
+/* CLASSIC */
+.template-classic #certificate {
+    background: #fefcf7;
+    border: 6px double var(--accent);
+}
+.template-classic .cert-inner {
+    border: 2px solid var(--accent);
+    padding: 24px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* MODERN */
+.template-modern #certificate {
+    background: linear-gradient(145deg, #f0f7ff, #ffffff);
+    border: none;
+    box-shadow: 0 8px 40px rgba(0, 40, 80, 0.1);
+}
+.template-modern .cert-inner {
+    border: 2px solid var(--accent);
+    padding: 24px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+/* PREMIUM */
+.template-premium #certificate {
+    background: linear-gradient(145deg, #1a1a2e, #2d2d44);
+    border: 3px solid var(--accent);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+}
+.template-premium .cert-inner {
+    border: 2px solid var(--accent);
+    padding: 24px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgba(26, 26, 46, 0.8);
+}
+.template-premium .cert-body-text { color: #d0c8b0; }
+.template-premium .cert-detail-label { color: #a09880; }
+.template-premium .cert-detail-value { color: #f0e6d3; }
+.template-premium .cert-signature-name { color: #f0e6d3; }
+.template-premium .cert-signature-title { color: #a09880; }
+.template-premium .cert-footer { color: #a09880; }
+
+/* MINIMAL */
+.template-minimal #certificate {
+    background: #ffffff;
+    border: 1px solid #d0d0d0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+.template-minimal .cert-inner {
+    border: none;
+    padding: 24px 20px;
+    flex: 1;
+    display: flex;
+    flex

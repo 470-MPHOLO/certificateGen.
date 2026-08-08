@@ -1,37 +1,23 @@
 /* ============================================
-   CSS VARIABLES - NAVY THEME
+   CSS VARIABLES
    ============================================ */
 :root {
-    /* Navy Background Theme */
-    --bg-primary: #0a1922;
-    --bg-secondary: #0d2130;
-    --bg-card: rgba(255, 255, 255, 0.06);
-    --bg-card-hover: rgba(255, 255, 255, 0.1);
-    --bg-input: rgba(255, 255, 255, 0.05);
-    --bg-input-focus: rgba(255, 255, 255, 0.08);
-    
-    /* Text Colors - All White */
-    --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.85);
-    --text-muted: rgba(255, 255, 255, 0.5);
-    --text-dim: rgba(255, 255, 255, 0.3);
-    
-    /* Borders */
-    --border-color: rgba(255, 255, 255, 0.1);
-    --border-hover: rgba(255, 255, 255, 0.25);
-    --border-focus: rgba(255, 215, 0, 0.4);
-    
-    /* Accent Colors */
-    --accent: #FFD700;
-    --accent-dark: #C9A84C;
-    --accent-rgb: 255, 215, 0;
-    
-    /* Shadows & Effects */
-    --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    --shadow-hover: 0 30px 80px rgba(0, 0, 0, 0.7);
-    --shadow-glow: 0 0 40px rgba(255, 215, 0, 0.05);
+    /* App Theme */
+    --app-bg: #f0f2f5;
+    --card-bg: #ffffff;
+    --text-primary: #1a1a2e;
+    --text-secondary: #2d2d3f;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
     --radius: 16px;
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Certificate Navy Theme */
+    --navy-bg: #0a1922;
+    --navy-dark: #060f16;
+    --gold: #FFD700;
+    --gold-dark: #C9A84C;
     
     /* Fonts */
     --font-serif: 'Playfair Display', 'Times New Roman', serif;
@@ -50,7 +36,7 @@
 
 body {
     font-family: var(--font-sans);
-    background: var(--bg-primary);
+    background: var(--app-bg);
     color: var(--text-primary);
     min-height: 100vh;
     padding: 24px;
@@ -58,9 +44,6 @@ body {
     justify-content: center;
     align-items: flex-start;
     line-height: 1.6;
-    background-image: 
-        radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.03), transparent 60%),
-        radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.02), transparent 50%);
 }
 
 .app {
@@ -70,7 +53,7 @@ body {
 }
 
 /* ============================================
-   HEADER - NAVY THEME
+   HEADER
    ============================================ */
 .app-header {
     display: flex;
@@ -80,8 +63,7 @@ body {
     flex-wrap: wrap;
     gap: 16px;
     padding: 16px 24px;
-    background: var(--bg-card);
-    backdrop-filter: blur(20px);
+    background: var(--card-bg);
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow);
@@ -96,33 +78,31 @@ body {
 .brand-icon {
     width: 44px;
     height: 44px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    background: var(--navy-bg);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--bg-primary);
+    color: var(--gold);
     font-size: 1.2rem;
-    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
 }
 
 .brand h1 {
     font-size: 1.4rem;
     font-weight: 700;
     color: var(--text-primary);
-    font-family: var(--font-serif);
 }
 
 .brand h1 span {
-    color: var(--accent);
+    color: var(--navy-bg);
 }
 
 .brand-badge {
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    color: var(--bg-primary);
+    background: var(--navy-bg);
+    color: var(--gold);
     font-size: 0.6rem;
-    font-weight: 700;
-    padding: 2px 12px;
+    font-weight: 600;
+    padding: 2px 10px;
     border-radius: 20px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
@@ -137,7 +117,7 @@ body {
 }
 
 .header-btn {
-    background: var(--bg-card);
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
     padding: 8px 16px;
     border-radius: 10px;
@@ -153,10 +133,8 @@ body {
 }
 
 .header-btn:hover {
-    border-color: var(--accent);
-    background: var(--bg-card-hover);
-    color: var(--text-primary);
-    box-shadow: var(--shadow-glow);
+    border-color: var(--navy-bg);
+    background: var(--app-bg);
 }
 
 /* ============================================
@@ -176,11 +154,10 @@ body {
 }
 
 /* ============================================
-   SIDEBAR - NAVY THEME
+   SIDEBAR
    ============================================ */
 .sidebar {
-    background: var(--bg-card);
-    backdrop-filter: blur(20px);
+    background: var(--card-bg);
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow);
@@ -194,9 +171,6 @@ body {
 .sidebar::-webkit-scrollbar {
     width: 4px;
 }
-.sidebar::-webkit-scrollbar-track {
-    background: transparent;
-}
 .sidebar::-webkit-scrollbar-thumb {
     background: var(--border-color);
     border-radius: 10px;
@@ -205,25 +179,17 @@ body {
 .sidebar-title {
     font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--accent);
-    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    font-weight: 600;
     margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: var(--font-serif);
 }
 
 .control-section {
     margin-bottom: 20px;
-}
-
-.control-section.client-settings {
-    background: rgba(255, 215, 0, 0.05);
-    padding: 12px 14px;
-    border-radius: 10px;
-    border-left: 3px solid var(--accent);
 }
 
 .control-label {
@@ -238,7 +204,7 @@ body {
 }
 
 .control-label i {
-    color: var(--accent);
+    color: var(--navy-bg);
     font-size: 0.8rem;
     width: 18px;
 }
@@ -254,7 +220,7 @@ body {
 .control-select {
     width: 100%;
     padding: 10px 14px;
-    background: var(--bg-input);
+    background: var(--app-bg);
     border: 1.5px solid var(--border-color);
     border-radius: 10px;
     font-size: 0.85rem;
@@ -264,21 +230,19 @@ body {
     outline: none;
 }
 
+.control-input:focus,
+.control-select:focus {
+    border-color: var(--navy-bg);
+    box-shadow: 0 0 0 4px rgba(10, 25, 34, 0.1);
+}
+
 .control-input::placeholder {
     color: var(--text-muted);
 }
 
-.control-input:focus,
-.control-select:focus {
-    border-color: var(--accent);
-    background: var(--bg-input-focus);
-    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.1);
-}
-
 .control-input[readonly] {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--app-bg);
     cursor: default;
-    color: var(--text-muted);
 }
 
 .row-2 {
@@ -288,7 +252,7 @@ body {
 }
 
 /* ============================================
-   UPLOAD ZONE - NAVY THEME
+   UPLOAD ZONE
    ============================================ */
 .upload-zone {
     border: 2px dashed var(--border-color);
@@ -297,19 +261,19 @@ body {
     text-align: center;
     cursor: pointer;
     transition: var(--transition);
-    background: var(--bg-input);
+    background: var(--app-bg);
     position: relative;
 }
 
 .upload-zone:hover {
-    border-color: var(--accent);
-    background: rgba(255, 215, 0, 0.05);
+    border-color: var(--navy-bg);
+    background: rgba(10, 25, 34, 0.05);
 }
 
 .upload-zone.dragover {
-    border-color: var(--accent);
-    background: rgba(255, 215, 0, 0.08);
-    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.1);
+    border-color: var(--navy-bg);
+    background: rgba(10, 25, 34, 0.08);
+    box-shadow: 0 0 0 4px rgba(10, 25, 34, 0.1);
 }
 
 .upload-zone i {
@@ -327,7 +291,7 @@ body {
 
 .upload-zone .file-name {
     font-size: 0.65rem;
-    color: var(--accent);
+    color: var(--navy-bg);
     font-weight: 500;
     margin-top: 4px;
     word-break: break-all;
@@ -357,7 +321,7 @@ body {
     text-align: center;
     cursor: pointer;
     transition: var(--transition);
-    background: var(--bg-input);
+    background: var(--app-bg);
     font-size: 0.7rem;
     font-weight: 500;
     color: var(--text-muted);
@@ -371,20 +335,18 @@ body {
 }
 
 .template-option:hover {
-    border-color: var(--accent);
-    background: rgba(255, 215, 0, 0.05);
-    color: var(--text-secondary);
+    border-color: var(--navy-bg);
+    background: rgba(10, 25, 34, 0.05);
 }
 
 .template-option.active {
-    border-color: var(--accent);
-    background: rgba(255, 215, 0, 0.1);
-    color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+    border-color: var(--navy-bg);
+    background: rgba(10, 25, 34, 0.1);
+    color: var(--navy-bg);
 }
 
 .template-option.active i {
-    color: var(--accent);
+    color: var(--navy-bg);
 }
 
 /* ============================================
@@ -409,12 +371,11 @@ body {
 
 .color-swatch:hover {
     transform: scale(1.1);
-    border-color: var(--accent);
 }
 
 .color-swatch.active {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);
+    border-color: var(--navy-bg);
+    box-shadow: 0 0 0 3px rgba(10, 25, 34, 0.15);
 }
 
 .color-swatch.active::after {
@@ -428,11 +389,11 @@ body {
     justify-content: center;
     color: #fff;
     font-size: 0.7rem;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* ============================================
-   BUTTONS - NAVY THEME
+   BUTTONS
    ============================================ */
 .action-bar {
     display: flex;
@@ -450,13 +411,13 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    color: var(--bg-primary);
+    background: var(--navy-bg);
+    color: #fff;
     border: none;
     padding: 12px 24px;
     border-radius: 10px;
     font-size: 0.85rem;
-    font-weight: 700;
+    font-weight: 600;
     font-family: var(--font-sans);
     cursor: pointer;
     transition: var(--transition);
@@ -468,18 +429,19 @@ body {
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
+    background: #162b3a;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(10, 25, 34, 0.2);
 }
 
 .btn-success {
-    background: linear-gradient(135deg, #0b5e42, #084f37);
+    background: #0b5e42;
     color: #fff;
     border: none;
     padding: 12px 24px;
     border-radius: 10px;
     font-size: 0.85rem;
-    font-weight: 700;
+    font-weight: 600;
     font-family: var(--font-sans);
     cursor: pointer;
     transition: var(--transition);
@@ -491,18 +453,19 @@ body {
 }
 
 .btn-success:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(11, 94, 66, 0.3);
+    background: #084f37;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(11, 94, 66, 0.2);
 }
 
 .btn-secondary {
-    background: var(--bg-input);
+    background: var(--app-bg);
     color: var(--text-secondary);
     border: 1px solid var(--border-color);
     padding: 12px 20px;
     border-radius: 10px;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 500;
     font-family: var(--font-sans);
     cursor: pointer;
     transition: var(--transition);
@@ -512,38 +475,32 @@ body {
 }
 
 .btn-secondary:hover {
-    background: var(--bg-card-hover);
-    border-color: var(--accent);
-    color: var(--text-primary);
+    background: var(--card-bg);
+    border-color: var(--navy-bg);
 }
 
 /* ============================================
-   VERIFICATION BADGE - NAVY THEME
+   VERIFICATION BADGE
    ============================================ */
 .verification-badge {
     margin-top: 16px;
     padding: 10px 14px;
-    background: rgba(255, 215, 0, 0.08);
-    border: 1px solid rgba(255, 215, 0, 0.15);
+    background: rgba(10, 25, 34, 0.08);
+    border: 1px solid rgba(10, 25, 34, 0.15);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     font-size: 0.7rem;
-    color: var(--accent);
-}
-
-.verification-badge i:first-child {
-    color: var(--accent);
+    color: var(--navy-bg);
 }
 
 /* ============================================
-   PREVIEW PANEL - NAVY THEME
+   PREVIEW PANEL
    ============================================ */
 .preview-panel {
-    background: var(--bg-card);
-    backdrop-filter: blur(20px);
+    background: var(--card-bg);
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow);
@@ -564,17 +521,16 @@ body {
 .preview-toolbar .label {
     font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--accent);
-    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    font-weight: 600;
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: var(--font-serif);
 }
 
 .toolbar-btn {
-    background: var(--bg-input);
+    background: var(--app-bg);
     border: 1px solid var(--border-color);
     padding: 6px 14px;
     border-radius: 8px;
@@ -590,16 +546,15 @@ body {
 }
 
 .toolbar-btn:hover {
-    background: var(--bg-card-hover);
-    border-color: var(--accent);
-    color: var(--text-primary);
+    background: var(--card-bg);
+    border-color: var(--navy-bg);
 }
 
 /* ============================================
-   CERTIFICATE WRAPPER - NAVY THEME
+   CERTIFICATE WRAPPER
    ============================================ */
 .certificate-wrapper {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--app-bg);
     border-radius: 12px;
     padding: 24px;
     display: flex;
@@ -607,29 +562,16 @@ body {
     align-items: center;
     min-height: 480px;
     position: relative;
-    overflow: hidden;
-}
-
-.certificate-wrapper::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-        radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.03), transparent 60%),
-        radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.02), transparent 50%);
-    pointer-events: none;
 }
 
 /* ============================================
-   CERTIFICATE STYLES - WHITE BACKGROUND
+   CERTIFICATE - NAVY BACKGROUND
    ============================================ */
 #certificate {
-    background: #ffffff;
     width: 100%;
     max-width: 780px;
     aspect-ratio: 1.414 / 1;
     padding: 36px 32px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     border-radius: 4px;
     position: relative;
     z-index: 1;
@@ -647,60 +589,244 @@ body {
 }
 
 /* ============================================
-   TEMPLATE VARIANTS
+   NAVY TEMPLATE - PRIMARY (DEFAULT)
    ============================================ */
-/* CLASSIC */
+.template-navy #certificate {
+    background: #0a1922;
+    border: 3px solid #FFD700;
+    box-shadow: 0 8px 40px rgba(10, 25, 34, 0.4);
+}
+
+.template-navy .cert-inner {
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    padding: 24px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Logo Container - White background for logo */
+.template-navy #logoContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.template-navy #logoBackground {
+    background: #ffffff;
+    padding: 8px 20px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+    min-width: 120px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.template-navy .cert-logo {
+    color: #0a1922;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: var(--font-serif);
+}
+
+.template-navy .cert-title {
+    color: #FFD700;
+    font-size: 1.8rem;
+    letter-spacing: 8px;
+    font-weight: 700;
+    font-family: var(--font-serif);
+    margin-bottom: 2px;
+}
+
+.template-navy .cert-sub {
+    color: #FFD700;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    border-bottom: 2px solid #FFD700;
+    display: inline-block;
+    padding-bottom: 6px;
+    align-self: center;
+}
+
+.template-navy .cert-body-text {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    margin: 8px 0 4px;
+    font-family: var(--font-serif-alt);
+    text-transform: uppercase;
+}
+
+.template-navy .cert-recipient {
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: var(--font-serif);
+    margin: 4px 0 4px;
+    word-break: break-word;
+    border-bottom: 2px solid #FFD700;
+    display: inline-block;
+    padding-bottom: 6px;
+    align-self: center;
+}
+
+.template-navy .cert-course {
+    color: #FFD700;
+    font-size: 1rem;
+    font-style: italic;
+    padding: 6px 20px;
+    display: inline-block;
+    margin: 6px 0 12px;
+    font-family: var(--font-serif-alt);
+    align-self: center;
+}
+
+.template-navy .cert-details-row {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin: 10px 0 14px;
+}
+
+.template-navy .cert-detail-item {
+    text-align: center;
+    font-size: 0.65rem;
+    font-family: var(--font-serif-alt);
+}
+
+.template-navy .cert-detail-label {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.template-navy .cert-detail-value {
+    display: block;
+    font-size: 0.85rem;
+    color: #ffffff;
+    margin-top: 2px;
+    font-weight: 600;
+}
+
+.template-navy .cert-signatures {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    margin: 14px 0 8px;
+}
+
+.template-navy .cert-signature-block {
+    text-align: center;
+    min-width: 140px;
+}
+
+.template-navy .cert-signature-img {
+    max-width: 140px;
+    height: auto;
+    margin-bottom: 2px;
+    display: none;
+}
+
+.template-navy .cert-signature-line {
+    width: 140px;
+    height: 1.5px;
+    background: #FFD700;
+    margin: 4px auto;
+}
+
+.template-navy .cert-signature-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ffffff;
+    font-family: var(--font-serif);
+}
+
+.template-navy .cert-signature-title {
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: var(--font-serif-alt);
+}
+
+.template-navy .cert-footer {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 6px;
+    font-size: 0.55rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-family: var(--font-serif-alt);
+}
+
+.template-navy .cert-footer i {
+    color: #FFD700;
+}
+
+/* ============================================
+   CLASSIC TEMPLATE
+   ============================================ */
 .template-classic #certificate {
     background: #fefcf7;
-    border: 6px double var(--accent);
+    border: 6px double #0a1922;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 .template-classic .cert-inner {
-    border: 2px solid var(--accent);
+    border: 2px solid #0a1922;
     padding: 24px 20px;
     flex: 1;
-    display: flex;
-    flex-direction: column;
 }
+.template-classic .cert-logo { color: #0a1922; }
+.template-classic .cert-title { color: #0a1922; }
+.template-classic .cert-sub { color: #0a1922; border-bottom-color: #0a1922; }
+.template-classic .cert-body-text { color: #666; }
+.template-classic .cert-recipient { color: #1a1a2e; border-bottom-color: #0a1922; }
+.template-classic .cert-course { color: #0a1922; }
+.template-classic .cert-detail-label { color: #999; }
+.template-classic .cert-detail-value { color: #1a1a2e; }
+.template-classic .cert-signature-name { color: #1a1a2e; }
+.template-classic .cert-signature-title { color: #888; }
+.template-classic .cert-signature-line { background: #333; }
+.template-classic .cert-footer { color: #aaa; }
 
-/* MODERN */
-.template-modern #certificate {
-    background: linear-gradient(145deg, #f0f7ff, #ffffff);
-    border: none;
-    box-shadow: 0 8px 40px rgba(0, 40, 80, 0.15);
-}
-.template-modern .cert-inner {
-    border: 2px solid var(--accent);
-    padding: 24px 20px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(2px);
-    border-radius: 4px;
-}
-
-/* PREMIUM - Dark Certificate */
+/* ============================================
+   PREMIUM TEMPLATE
+   ============================================ */
 .template-premium #certificate {
     background: linear-gradient(145deg, #1a1a2e, #2d2d44);
-    border: 3px solid var(--accent);
+    border: 3px solid #FFD700;
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
 }
 .template-premium .cert-inner {
-    border: 2px solid var(--accent);
+    border: 2px solid rgba(255, 215, 0, 0.2);
     padding: 24px 20px;
     flex: 1;
-    display: flex;
-    flex-direction: column;
     background: rgba(26, 26, 46, 0.8);
 }
-.template-premium .cert-body-text { color: #d0c8b0; }
-.template-premium .cert-detail-label { color: #a09880; }
+.template-premium .cert-logo { color: #FFD700; }
+.template-premium .cert-title { color: #FFD700; }
+.template-premium .cert-sub { color: #FFD700; border-bottom-color: #FFD700; }
+.template-premium .cert-body-text { color: rgba(255, 255, 255, 0.5); }
+.template-premium .cert-recipient { color: #f0e6d3; border-bottom-color: #FFD700; }
+.template-premium .cert-course { color: #FFD700; }
+.template-premium .cert-detail-label { color: rgba(255, 255, 255, 0.4); }
 .template-premium .cert-detail-value { color: #f0e6d3; }
 .template-premium .cert-signature-name { color: #f0e6d3; }
-.template-premium .cert-signature-title { color: #a09880; }
-.template-premium .cert-footer { color: #a09880; }
+.template-premium .cert-signature-title { color: rgba(255, 255, 255, 0.5); }
+.template-premium .cert-signature-line { background: #FFD700; }
+.template-premium .cert-footer { color: rgba(255, 255, 255, 0.3); }
 
-/* MINIMAL */
+/* ============================================
+   MINIMAL TEMPLATE
+   ============================================ */
 .template-minimal #certificate {
     background: #ffffff;
     border: 1px solid #d0d0d0;
@@ -710,167 +836,19 @@ body {
     border: none;
     padding: 24px 20px;
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: transparent;
 }
-
-/* ============================================
-   CERTIFICATE COMPONENTS
-   ============================================ */
-.cert-logo {
-    font-size: 0.7rem;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 10px;
-    font-family: var(--font-serif);
-    color: var(--accent);
-}
-
-.cert-title {
-    font-size: 1.8rem;
-    letter-spacing: 8px;
-    font-weight: 700;
-    font-family: var(--font-serif);
-    margin-bottom: 2px;
-    text-align: center;
-    color: var(--accent);
-}
-
-.cert-sub {
-    font-size: 0.7rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    border-bottom: 2px solid var(--accent);
-    display: inline-block;
-    padding-bottom: 6px;
-    align-self: center;
-    color: var(--accent);
-}
-
-.cert-body-text {
-    font-size: 0.8rem;
-    color: #666;
-    letter-spacing: 1px;
-    margin: 8px 0 4px;
-    font-family: var(--font-serif-alt);
-    text-align: center;
-    text-transform: uppercase;
-}
-
-.cert-recipient {
-    font-size: 2rem;
-    font-weight: 700;
-    font-family: var(--font-serif);
-    margin: 4px 0 4px;
-    word-break: break-word;
-    border-bottom: 2px solid var(--accent);
-    display: inline-block;
-    padding-bottom: 6px;
-    align-self: center;
-    color: #1a1a2e;
-}
-
-.cert-course {
-    font-size: 1rem;
-    font-style: italic;
-    padding: 6px 20px;
-    display: inline-block;
-    margin: 6px 0 12px;
-    font-family: var(--font-serif-alt);
-    align-self: center;
-    color: var(--accent);
-    opacity: 0.9;
-}
-
-.cert-details-row {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    flex-wrap: wrap;
-    margin: 10px 0 14px;
-}
-
-.cert-detail-item {
-    text-align: center;
-    font-size: 0.65rem;
-    color: #888;
-    font-family: var(--font-serif-alt);
-}
-
-.cert-detail-item .cert-detail-label {
-    display: block;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
-    color: #999;
-}
-
-.cert-detail-value {
-    display: block;
-    font-size: 0.85rem;
-    color: #1a1a2e;
-    margin-top: 2px;
-    font-weight: 600;
-}
-
-.cert-signatures {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    flex-wrap: wrap;
-    margin: 14px 0 8px;
-}
-
-.cert-signature-block {
-    text-align: center;
-    min-width: 140px;
-}
-
-.cert-signature-img {
-    max-width: 140px;
-    height: auto;
-    margin-bottom: 2px;
-    display: none;
-}
-
-.cert-signature-line {
-    width: 140px;
-    height: 1.5px;
-    background: #333;
-    margin: 4px auto;
-}
-
-.cert-signature-name {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #1a1a2e;
-    font-family: var(--font-serif);
-}
-
-.cert-signature-title {
-    font-size: 0.6rem;
-    color: #888;
-    font-family: var(--font-serif-alt);
-}
-
-.cert-footer {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 6px;
-    font-size: 0.55rem;
-    color: #aaa;
-    font-family: var(--font-serif-alt);
-}
-
-.cert-footer span {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
+.template-minimal .cert-logo { color: #2c3e50; }
+.template-minimal .cert-title { color: #2c3e50; letter-spacing: 4px; }
+.template-minimal .cert-sub { color: #7f8c8d; border-bottom-color: #7f8c8d; }
+.template-minimal .cert-body-text { color: #999; }
+.template-minimal .cert-recipient { color: #1a1a2e; border-bottom-color: #7f8c8d; }
+.template-minimal .cert-course { color: #2c3e50; }
+.template-minimal .cert-detail-label { color: #999; }
+.template-minimal .cert-detail-value { color: #1a1a2e; }
+.template-minimal .cert-signature-name { color: #1a1a2e; }
+.template-minimal .cert-signature-title { color: #888; }
+.template-minimal .cert-signature-line { background: #333; }
+.template-minimal .cert-footer { color: #aaa; }
 
 /* ============================================
    QR CODE
@@ -882,10 +860,10 @@ body {
     width: 85px;
     height: 85px;
     opacity: 0.95;
-    background: #fff;
+    background: #ffffff;
     padding: 4px;
     border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .cert-qr img,
@@ -917,21 +895,19 @@ body {
 }
 
 /* ============================================
-   TOAST - NAVY THEME
+   TOAST
    ============================================ */
 .toast {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
+    background: #1a1a2e;
+    color: #fff;
     padding: 14px 24px;
     border-radius: 12px;
     font-size: 0.85rem;
     font-weight: 500;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
     transform: translateY(80px);
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -944,10 +920,6 @@ body {
 .toast.show {
     transform: translateY(0);
     opacity: 1;
-}
-
-.toast i {
-    font-size: 1.1rem;
 }
 
 /* ============================================
@@ -995,7 +967,6 @@ body {
     .header-btn { flex: 1; justify-content: center; }
     .cert-qr { width: 60px; height: 60px; bottom: 12px; right: 14px; }
     .cert-footer { font-size: 0.45rem; flex-wrap: wrap; }
-    .preview-footer { font-size: 0.55rem; gap: 10px; }
 }
 
 /* ============================================
@@ -1003,7 +974,7 @@ body {
    ============================================ */
 @media print {
     body {
-        background: #fff !important;
+        background: #fff;
         padding: 0;
     }
     .sidebar,

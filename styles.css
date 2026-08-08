@@ -13,11 +13,13 @@
     --radius: 16px;
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
-    /* Certificate Navy Theme */
+    /* Certificate Navy Theme - PURE NAVY & WHITE */
     --navy-bg: #0a1922;
     --navy-dark: #060f16;
-    --gold: #FFD700;
-    --gold-dark: #C9A84C;
+    --navy-light: #0d2130;
+    --white: #ffffff;
+    --white-muted: rgba(255, 255, 255, 0.7);
+    --white-dim: rgba(255, 255, 255, 0.4);
     
     /* Fonts */
     --font-serif: 'Playfair Display', 'Times New Roman', serif;
@@ -83,7 +85,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--gold);
+    color: var(--white);
     font-size: 1.2rem;
 }
 
@@ -99,7 +101,7 @@ body {
 
 .brand-badge {
     background: var(--navy-bg);
-    color: var(--gold);
+    color: var(--white);
     font-size: 0.6rem;
     font-weight: 600;
     padding: 2px 10px;
@@ -350,7 +352,7 @@ body {
 }
 
 /* ============================================
-   COLOR SWATCHES
+   COLOR SWATCHES - REMOVED YELLOW!
    ============================================ */
 .color-row {
     display: flex;
@@ -412,7 +414,7 @@ body {
 
 .btn-primary {
     background: var(--navy-bg);
-    color: #fff;
+    color: var(--white);
     border: none;
     padding: 12px 24px;
     border-radius: 10px;
@@ -429,14 +431,14 @@ body {
 }
 
 .btn-primary:hover {
-    background: #162b3a;
+    background: var(--navy-light);
     transform: translateY(-1px);
     box-shadow: 0 8px 24px rgba(10, 25, 34, 0.2);
 }
 
 .btn-success {
     background: #0b5e42;
-    color: #fff;
+    color: var(--white);
     border: none;
     padding: 12px 24px;
     border-radius: 10px;
@@ -565,7 +567,7 @@ body {
 }
 
 /* ============================================
-   CERTIFICATE - NAVY BACKGROUND
+   CERTIFICATE - PURE NAVY BACKGROUND
    ============================================ */
 #certificate {
     width: 100%;
@@ -589,23 +591,23 @@ body {
 }
 
 /* ============================================
-   NAVY TEMPLATE - PRIMARY (DEFAULT)
+   NAVY TEMPLATE - PURE NAVY & WHITE
    ============================================ */
 .template-navy #certificate {
     background: #0a1922;
-    border: 3px solid #FFD700;
+    border: 2px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 8px 40px rgba(10, 25, 34, 0.4);
 }
 
 .template-navy .cert-inner {
-    border: 2px solid rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 24px 20px;
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-/* Logo Container - White background for logo */
+/* Logo Container - White background for logo visibility */
 .template-navy #logoContainer {
     display: flex;
     justify-content: center;
@@ -621,7 +623,7 @@ body {
     justify-content: center;
     min-height: 60px;
     min-width: 120px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .template-navy .cert-logo {
@@ -633,8 +635,9 @@ body {
     font-family: var(--font-serif);
 }
 
+/* ALL TEXT IS WHITE - NO YELLOW */
 .template-navy .cert-title {
-    color: #FFD700;
+    color: #ffffff;
     font-size: 1.8rem;
     letter-spacing: 8px;
     font-weight: 700;
@@ -643,12 +646,12 @@ body {
 }
 
 .template-navy .cert-sub {
-    color: #FFD700;
+    color: rgba(255, 255, 255, 0.7);
     font-size: 0.7rem;
     letter-spacing: 4px;
     text-transform: uppercase;
     margin-bottom: 14px;
-    border-bottom: 2px solid #FFD700;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     display: inline-block;
     padding-bottom: 6px;
     align-self: center;
@@ -670,14 +673,14 @@ body {
     font-family: var(--font-serif);
     margin: 4px 0 4px;
     word-break: break-word;
-    border-bottom: 2px solid #FFD700;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     display: inline-block;
     padding-bottom: 6px;
     align-self: center;
 }
 
 .template-navy .cert-course {
-    color: #FFD700;
+    color: rgba(255, 255, 255, 0.85);
     font-size: 1rem;
     font-style: italic;
     padding: 6px 20px;
@@ -739,8 +742,8 @@ body {
 
 .template-navy .cert-signature-line {
     width: 140px;
-    height: 1.5px;
-    background: #FFD700;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
     margin: 4px auto;
 }
 
@@ -768,19 +771,19 @@ body {
 }
 
 .template-navy .cert-footer i {
-    color: #FFD700;
+    color: rgba(255, 255, 255, 0.4);
 }
 
 /* ============================================
-   CLASSIC TEMPLATE
+   OTHER TEMPLATES (Optional)
    ============================================ */
 .template-classic #certificate {
     background: #fefcf7;
-    border: 6px double #0a1922;
+    border: 2px solid #0a1922;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 .template-classic .cert-inner {
-    border: 2px solid #0a1922;
+    border: 1px solid #0a1922;
     padding: 24px 20px;
     flex: 1;
 }
@@ -797,36 +800,6 @@ body {
 .template-classic .cert-signature-line { background: #333; }
 .template-classic .cert-footer { color: #aaa; }
 
-/* ============================================
-   PREMIUM TEMPLATE
-   ============================================ */
-.template-premium #certificate {
-    background: linear-gradient(145deg, #1a1a2e, #2d2d44);
-    border: 3px solid #FFD700;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
-}
-.template-premium .cert-inner {
-    border: 2px solid rgba(255, 215, 0, 0.2);
-    padding: 24px 20px;
-    flex: 1;
-    background: rgba(26, 26, 46, 0.8);
-}
-.template-premium .cert-logo { color: #FFD700; }
-.template-premium .cert-title { color: #FFD700; }
-.template-premium .cert-sub { color: #FFD700; border-bottom-color: #FFD700; }
-.template-premium .cert-body-text { color: rgba(255, 255, 255, 0.5); }
-.template-premium .cert-recipient { color: #f0e6d3; border-bottom-color: #FFD700; }
-.template-premium .cert-course { color: #FFD700; }
-.template-premium .cert-detail-label { color: rgba(255, 255, 255, 0.4); }
-.template-premium .cert-detail-value { color: #f0e6d3; }
-.template-premium .cert-signature-name { color: #f0e6d3; }
-.template-premium .cert-signature-title { color: rgba(255, 255, 255, 0.5); }
-.template-premium .cert-signature-line { background: #FFD700; }
-.template-premium .cert-footer { color: rgba(255, 255, 255, 0.3); }
-
-/* ============================================
-   MINIMAL TEMPLATE
-   ============================================ */
 .template-minimal #certificate {
     background: #ffffff;
     border: 1px solid #d0d0d0;
@@ -863,7 +836,7 @@ body {
     background: #ffffff;
     padding: 4px;
     border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .cert-qr img,

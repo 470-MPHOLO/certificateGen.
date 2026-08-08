@@ -1,0 +1,586 @@
+(function() {
+    'use strict';
+
+    // ============================================
+    // DOM REFS
+    // ============================================
+    const recipientInput = document.getElementById('recipientName');
+    const recipientDisplay = document.getElementById('recipientDisplay');
+    const courseInput = document.getElementById('courseInput');
+    const courseDisplay = document.getElementById('courseDisplay');
+    const dateInput = document.getElementById('completionDate');
+    const dateDisplay = document.getElementById('dateDisplay');
+    const durationInput = document.getElementById('durationInput');
+    const durationDisplay = document.getElementById('durationDisplay');
+    const certIdInput = document.getElementById('certIdInput');
+    const certIdDisplay = document.getElementById('certIdDisplay');
+    const instructorNameInput = document.getElementById('instructorName');
+    const instructorTitleInput = document.getElementById('instructorTitle');
+    const instituteNameInput = document.getElementById('instituteName');
+    const certSignatureName = document.getElementById('certSignatureName');
+    const certSignatureTitle = document.getElementById('certSignatureTitle');
+    const templateOptions = document.querySelectorAll('.template-option');
+    const certificateEl = document.getElementById('certificate');
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    const sigFileInput = document.getElementById('sigFileInput');
+    const sigFileName = document.getElementById('sigFileName');
+    const sigUploadZone = document.getElementById('sigUploadZone');
+    const signaturePreview = document.getElementById('signaturePreview');
+    const sigLine = document.getElementById('sigLine');
+    const logoFileInput = document.getElementById('logoFileInput');
+    const logoFileName = document.getElementById('logoFileName');
+    const logoUploadZone = document.getElementById('logoUploadZone');
+    const logoPreview = document.getElementById('logoPreview');
+    const logoText = document.getElementById('logoText');
+    const updateBtn = document.getElementById('updateBtn');
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+    const downloadPngBtn = document.getElementById('downloadPngBtn');
+    const printBtn = document.getElementById('printBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const saveHistoryBtn = document.getElementById('saveHistoryBtn');
+    const loadHistoryBtn = document.getElementById('loadHistoryBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const blockchainBtn = document.getElementById('blockchainBtn');
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+    const resetZoomBtn = document.getElementById('resetZoomBtn');
+    const qrContainer = document.getElementById('qrContainer');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMessage');
+
+    // ============================================
+    // STATE
+    // ============================================
+    let toastTimer = null;
+    let currentTemplate = 'oxford';
+    let currentColor = '#FFD700';
+    let signatureDataUrl = null;
+    let logoDataUrl = null;
+    let zoomLevel = 1;
+    let history = JSON.parse(localStorage.getItem('cre8learn_elite_history') || '[]');
+    let qrCodeInstance = null;
+
+    // ============================================
+    // UTILITY FUNCTIONS
+    // ============================================
+    function showToast(msg, icon = 'fa-check-circle', color = '#FFD700') {
+        toastMsg.textContent = msg;
+        const iconEl = toast.querySelector('i');
+        iconEl.className = `fas ${icon}`;
+        iconEl.style.color = color;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    function generateCertId() {
+        const prefix = 'CRL-';
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let id = '';
+        for (let i = 0; i < 6; i++) {
+            id += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return prefix + id;
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return null;
+        const d = new Date(dateStr + 'T00:00:00');
+        if (isNaN(d.getTime())) return null;
+        return d.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+    }
+
+    function getTodayStr() {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }
+
+    // ============================================
+    // QR CODE GENERATION
+    // ============================================
+    function updateQR() {
+        const name = recipientDisplay.textContent.trim() || 'Recipient';
+        const course = courseDisplay.textContent.trim() || 'Course';
+        const institute = instituteNameInput.value.trim() || 'Institute';
+        const certId = certIdDisplay.textContent.trim();
+        
+        const payload = JSON.stringify({
+            institute: institute,
+            recipient: name,
+            course: course,
+            certificateId: certId,
+            issued: dateDisplay.textContent,
+            verified: true
+        });
+
+        try {
+            if (typeof QRCode === 'undefined') { 
+                qrContainer.innerHTML = '<div style="font-size:0.5rem;color:#999;">QR</div>'; 
+                return; 
+            }
+            qrContainer.innerHTML = '';
+            qrCodeInstance = new QRCode(qrContainer, {
+                text: payload,
+                width: 200,
+                height: 200,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H // High error correction
+            });
+        } catch (err) {
+            console.error('QR generation failed:', err);
+            qrContainer.innerHTML = '';
+        }
+    }
+
+    // ============================================
+    // MAIN RENDER FUNCTION
+    // ============================================
+    function render() {
+        // Recipient
+        let name = recipientInput.value.trim() || '[Recipient]';
+        recipientDisplay.textContent = name;
+
+        // Course
+        courseDisplay.textContent = courseInput.value || 'Course';
+
+        // Date
+        let dateVal = dateInput.value;
+        let formatted = formatDate(dateVal);
+        if (!formatted) {
+            const today = getTodayStr();
+            dateInput.value = today;
+            formatted = formatDate(today);
+        }
+        dateDisplay.textContent = formatted || 'Date';
+
+        // Duration
+        durationDisplay.textContent = durationInput.value || 'Duration';
+
+        // Institute Name
+        logoText.textContent = (instituteNameInput.value || 'Institute').toUpperCase();
+
+        // Instructor
+        certSignatureName.textContent = instructorNameInput.value || 'Instructor';
+        certSignatureTitle.textContent = instructorTitleInput.value || 'Title';
+
+        // Certificate ID
+        const id = generateCertId();
+        certIdInput.value = id;
+        certIdDisplay.textContent = id;
+
+        // Template
+        certificateEl.className = `template-${currentTemplate}`;
+
+        // Apply Accent Color
+        const title = document.getElementById('certTitleDisplay');
+        const sub = document.getElementById('certSubDisplay');
+        const course = document.getElementById('courseDisplay');
+        const logo = document.getElementById('logoText');
+        
+        // Set accent color for elements
+        const accentElements = [title, sub, course, logo];
+        accentElements.forEach(el => {
+            if (el) {
+                el.style.color = currentColor;
+            }
+        });
+
+        // Signature
+        if (signatureDataUrl) {
+            signaturePreview.src = signatureDataUrl;
+            signaturePreview.style.display = 'inline-block';
+            sigLine.style.display = 'none';
+        } else {
+            signaturePreview.style.display = 'none';
+            sigLine.style.display = 'block';
+        }
+
+        // Logo
+        if (logoDataUrl) {
+            logoPreview.src = logoDataUrl;
+            logoPreview.style.display = 'inline-block';
+            logoText.style.display = 'none';
+        } else {
+            logoPreview.style.display = 'none';
+            logoText.style.display = 'block';
+        }
+
+        // QR Code
+        updateQR();
+
+        // Zoom
+        certificateEl.style.transform = `scale(${zoomLevel})`;
+        certificateEl.style.transformOrigin = 'center center';
+    }
+
+    // ============================================
+    // FILE HANDLING
+    // ============================================
+    function handleSignatureFile(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => { 
+            signatureDataUrl = e.target.result; 
+            sigFileName.textContent = file.name; 
+            render(); 
+            showToast('Signature uploaded successfully', 'fa-check-circle', '#FFD700');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function handleLogoFile(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => { 
+            logoDataUrl = e.target.result; 
+            logoFileName.textContent = file.name; 
+            render(); 
+            showToast('Logo uploaded successfully', 'fa-check-circle', '#FFD700');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // ============================================
+    // EXPORT FUNCTIONS
+    // ============================================
+    async function downloadPDF() {
+        const btn = downloadPdfBtn;
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        btn.disabled = true;
+        
+        try {
+            const element = document.getElementById('certificate');
+            const originalTransform = element.style.transform;
+            const originalOrigin = element.style.transformOrigin;
+            element.style.transform = 'none';
+            element.style.transformOrigin = 'center center';
+            await new Promise(r => setTimeout(r, 100));
+
+            const canvas = await html2canvas(element, {
+                scale: 4,
+                backgroundColor: '#ffffff',
+                useCORS: true,
+                logging: false,
+                width: element.scrollWidth,
+                height: element.scrollHeight
+            });
+            
+            element.style.transform = originalTransform;
+            element.style.transformOrigin = originalOrigin;
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('landscape', 'in', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const margin = 0.25;
+            const maxWidth = pdfWidth - 2 * margin;
+            const maxHeight = pdfHeight - 2 * margin;
+            const imgAspect = canvas.width / canvas.height;
+            let finalWidth = maxWidth;
+            let finalHeight = finalWidth / imgAspect;
+            if (finalHeight > maxHeight) {
+                finalHeight = maxHeight;
+                finalWidth = finalHeight * imgAspect;
+            }
+            const x = (pdfWidth - finalWidth) / 2;
+            const y = (pdfHeight - finalHeight) / 2;
+            pdf.addImage(imgData, 'JPEG', x, y, finalWidth, finalHeight);
+            pdf.save(`certificate_${recipientInput.value.trim() || 'recipient'}.pdf`);
+            showToast('PDF downloaded successfully!', 'fa-file-pdf', '#4ade80');
+        } catch (err) {
+            console.error(err);
+            showToast('PDF error: ' + err.message, 'fa-exclamation-triangle', '#ef4444');
+        }
+        btn.innerHTML = orig;
+        btn.disabled = false;
+    }
+
+    async function downloadPNG() {
+        const btn = downloadPngBtn;
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Rendering...';
+        btn.disabled = true;
+        
+        try {
+            const el = document.getElementById('certificate');
+            const originalTransform = el.style.transform;
+            const originalOrigin = el.style.transformOrigin;
+            el.style.transform = 'none';
+            el.style.transformOrigin = 'center center';
+            await new Promise(r => setTimeout(r, 100));
+
+            const canvas = await html2canvas(el, {
+                scale: 4,
+                backgroundColor: '#ffffff',
+                useCORS: true,
+                logging: false,
+                width: el.scrollWidth,
+                height: el.scrollHeight
+            });
+            
+            el.style.transform = originalTransform;
+            el.style.transformOrigin = originalOrigin;
+
+            const link = document.createElement('a');
+            link.download = `certificate_${recipientInput.value.trim() || 'recipient'}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast('PNG downloaded successfully!', 'fa-image', '#3b82f6');
+        } catch (err) {
+            console.error(err);
+            showToast('PNG error: ' + err.message, 'fa-exclamation-triangle', '#ef4444');
+        }
+        btn.innerHTML = orig;
+        btn.disabled = false;
+    }
+
+    // ============================================
+    // HISTORY FUNCTIONS
+    // ============================================
+    function saveHistory() {
+        const entry = {
+            name: recipientInput.value.trim() || 'Unnamed',
+            course: courseInput.value,
+            date: dateInput.value,
+            duration: durationInput.value,
+            instituteName: instituteNameInput.value,
+            instructorName: instructorNameInput.value,
+            instructorTitle: instructorTitleInput.value,
+            template: currentTemplate,
+            color: currentColor,
+            signature: signatureDataUrl || null,
+            logo: logoDataUrl || null,
+            id: certIdDisplay.textContent,
+            timestamp: Date.now()
+        };
+        history.unshift(entry);
+        if (history.length > 50) history.pop();
+        localStorage.setItem('cre8learn_elite_history', JSON.stringify(history));
+        showToast('Certificate saved to history!', 'fa-save', '#8b5cf6');
+    }
+
+    function loadHistory() {
+        if (history.length === 0) { 
+            showToast('No saved certificates found', 'fa-info-circle', '#f59e0b'); 
+            return; 
+        }
+        const latest = history[0];
+        recipientInput.value = latest.name || '';
+        courseInput.value = latest.course || 'Executive Leadership Program';
+        dateInput.value = latest.date || getTodayStr();
+        durationInput.value = latest.duration || '6 Months';
+        instituteNameInput.value = latest.instituteName || 'University of Oxford';
+        instructorNameInput.value = latest.instructorName || 'Prof. James Miller';
+        instructorTitleInput.value = latest.instructorTitle || 'Dean of Faculty';
+        currentTemplate = latest.template || 'oxford';
+        currentColor = latest.color || '#FFD700';
+        signatureDataUrl = latest.signature || null;
+        logoDataUrl = latest.logo || null;
+
+        templateOptions.forEach(el => {
+            el.classList.toggle('active', el.dataset.template === currentTemplate);
+        });
+        colorSwatches.forEach(el => {
+            el.classList.toggle('active', el.dataset.color === currentColor);
+        });
+        sigFileName.textContent = signatureDataUrl ? 'Loaded from history' : 'No file selected';
+        logoFileName.textContent = logoDataUrl ? 'Loaded from history' : 'No file selected';
+
+        render();
+        showToast('Loaded latest certificate from history', 'fa-history', '#8b5cf6');
+    }
+
+    // ============================================
+    // BLOCKCHAIN VERIFICATION (Simulated)
+    // ============================================
+    function verifyBlockchain() {
+        const certId = certIdDisplay.textContent;
+        const name = recipientDisplay.textContent;
+        const institute = instituteNameInput.value;
+        
+        showToast(
+            `🔗 Verified on Blockchain · ${institute} · ${name} · ID: ${certId}`,
+            'fa-shield-alt',
+            '#4ade80'
+        );
+        
+        // In production, this would call a smart contract
+        console.log('Blockchain verification:', { certId, name, institute });
+    }
+
+    // ============================================
+    // RESET FUNCTION
+    // ============================================
+    function resetAll() {
+        recipientInput.value = 'Dr. Sarah Johnson';
+        courseInput.value = 'Executive Leadership Program';
+        dateInput.value = getTodayStr();
+        durationInput.value = '6 Months';
+        instituteNameInput.value = 'University of Oxford';
+        instructorNameInput.value = 'Prof. James Miller';
+        instructorTitleInput.value = 'Dean of Faculty';
+        currentTemplate = 'oxford';
+        currentColor = '#FFD700';
+        signatureDataUrl = null;
+        logoDataUrl = null;
+        sigFileName.textContent = 'No file selected';
+        logoFileName.textContent = 'No file selected';
+        signaturePreview.style.display = 'none';
+        sigLine.style.display = 'block';
+        logoPreview.style.display = 'none';
+        logoText.style.display = 'block';
+        sigFileInput.value = '';
+        logoFileInput.value = '';
+
+        templateOptions.forEach(el => {
+            el.classList.toggle('active', el.dataset.template === 'oxford');
+        });
+        colorSwatches.forEach(el => {
+            el.classList.toggle('active', el.dataset.color === '#FFD700');
+        });
+
+        zoomLevel = 1;
+        certificateEl.style.transform = 'scale(1)';
+        render();
+        showToast('Reset to default premium template', 'fa-undo-alt', '#64748b');
+    }
+
+    // ============================================
+    // ZOOM FUNCTIONS
+    // ============================================
+    function applyZoom() {
+        certificateEl.style.transform = `scale(${zoomLevel})`;
+        certificateEl.style.transformOrigin = 'center center';
+    }
+
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+    // Input events
+    recipientInput.addEventListener('input', render);
+    courseInput.addEventListener('input', render);
+    dateInput.addEventListener('change', render);
+    durationInput.addEventListener('input', render);
+    instructorNameInput.addEventListener('input', render);
+    instructorTitleInput.addEventListener('input', render);
+    instituteNameInput.addEventListener('input', render);
+    updateBtn.addEventListener('click', render);
+
+    // Template selection
+    templateOptions.forEach(el => {
+        el.addEventListener('click', function() {
+            templateOptions.forEach(o => o.classList.remove('active'));
+            this.classList.add('active');
+            currentTemplate = this.dataset.template;
+            render();
+            showToast(`Template: ${this.textContent.trim()}`, 'fa-layer-group', '#3b82f6');
+        });
+    });
+
+    // Color selection
+    colorSwatches.forEach(el => {
+        el.addEventListener('click', function() {
+            colorSwatches.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            currentColor = this.dataset.color;
+            render();
+        });
+    });
+
+    // Signature upload
+    sigFileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) handleSignatureFile(e.target.files[0]);
+    });
+    sigUploadZone.addEventListener('dragover', (e) => { 
+        e.preventDefault(); 
+        sigUploadZone.classList.add('dragover'); 
+    });
+    sigUploadZone.addEventListener('dragleave', () => { 
+        sigUploadZone.classList.remove('dragover'); 
+    });
+    sigUploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        sigUploadZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) handleSignatureFile(e.dataTransfer.files[0]);
+    });
+
+    // Logo upload
+    logoFileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) handleLogoFile(e.target.files[0]);
+    });
+    logoUploadZone.addEventListener('dragover', (e) => { 
+        e.preventDefault(); 
+        logoUploadZone.classList.add('dragover'); 
+    });
+    logoUploadZone.addEventListener('dragleave', () => { 
+        logoUploadZone.classList.remove('dragover'); 
+    });
+    logoUploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        logoUploadZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) handleLogoFile(e.dataTransfer.files[0]);
+    });
+
+    // Export buttons
+    downloadPdfBtn.addEventListener('click', downloadPDF);
+    downloadPngBtn.addEventListener('click', downloadPNG);
+    printBtn.addEventListener('click', () => window.print());
+
+    // History
+    saveHistoryBtn.addEventListener('click', saveHistory);
+    loadHistoryBtn.addEventListener('click', loadHistory);
+
+    // Blockchain
+    blockchainBtn.addEventListener('click', verifyBlockchain);
+
+    // Reset
+    resetBtn.addEventListener('click', resetAll);
+
+    // Preview
+    previewBtn.addEventListener('click', () => {
+        render();
+        showToast('Preview updated', 'fa-eye', '#3b82f6');
+    });
+
+    // Zoom
+    zoomInBtn.addEventListener('click', () => { 
+        zoomLevel = Math.min(zoomLevel + 0.1, 1.8); 
+        applyZoom(); 
+    });
+    zoomOutBtn.addEventListener('click', () => { 
+        zoomLevel = Math.max(zoomLevel - 0.1, 0.5); 
+        applyZoom(); 
+    });
+    resetZoomBtn.addEventListener('click', () => { 
+        zoomLevel = 1; 
+        applyZoom(); 
+        showToast('Zoom reset', 'fa-undo-alt', '#64748b'); 
+    });
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    function init() {
+        if (!dateInput.value) dateInput.value = getTodayStr();
+        document.querySelector('.template-option[data-template="oxford"]')?.classList.add('active');
+        document.querySelector('.color-swatch[data-color="#FFD700"]')?.classList.add('active');
+        const id = generateCertId();
+        certIdInput.value = id;
+        certIdDisplay.textContent = id;
+        render();
+        showToast('🎓 Elite Certificate Generator Ready', 'fa-check-circle', '#FFD700');
+    }
+
+    init();
+
+})();

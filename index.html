@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate Generator · White Label</title>
+    <title>Certificate Generator · Navy Edition</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -28,7 +28,7 @@
                 <div class="brand-icon">
                     <i class="fas fa-certificate"></i>
                 </div>
-                <h1><span id="brandName">School</span> <span class="brand-badge">Certificates</span></h1>
+                <h1>Cre8<span>learn</span> <span class="brand-badge">Pro</span></h1>
             </div>
             <div class="header-actions">
                 <button class="header-btn" id="resetBtn">
@@ -36,9 +36,6 @@
                 </button>
                 <button class="header-btn" id="printBtn">
                     <i class="fas fa-print"></i> Print
-                </button>
-                <button class="header-btn" id="previewBtn">
-                    <i class="fas fa-eye"></i> Preview
                 </button>
             </div>
         </header>
@@ -48,44 +45,6 @@
             <aside class="sidebar">
                 <div class="sidebar-title">
                     <i class="fas fa-sliders-h"></i> Certificate Controls
-                </div>
-
-                <!-- Client School Settings -->
-                <div class="control-section client-settings">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-                        <i class="fas fa-building" style="color:var(--accent);"></i>
-                        <span style="font-weight:600;font-size:0.8rem;">School/Institution Settings</span>
-                    </div>
-                    <div class="row-2">
-                        <div>
-                            <label class="control-label">
-                                <i class="fas fa-school"></i> Institution Name
-                            </label>
-                            <input class="control-input" id="instituteName" 
-                                   placeholder="e.g. Oxford University" value="Oxford University">
-                        </div>
-                        <div>
-                            <label class="control-label">
-                                <i class="fas fa-tag"></i> Certificate Type
-                            </label>
-                            <select class="control-input" id="certTypeSelect">
-                                <option value="completion">Certificate of Completion</option>
-                                <option value="excellence">Certificate of Excellence</option>
-                                <option value="achievement">Certificate of Achievement</option>
-                                <option value="participation">Certificate of Participation</option>
-                                <option value="custom">Custom</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row-2" id="customCertRow" style="display:none;margin-top:8px;">
-                        <div style="grid-column:1/-1;">
-                            <label class="control-label">
-                                <i class="fas fa-pen"></i> Custom Title
-                            </label>
-                            <input class="control-input" id="customCertTitle" 
-                                   placeholder="e.g. Certificate of Distinction" value="Certificate of Distinction">
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Recipient -->
@@ -137,7 +96,7 @@
                         </div>
                         <div>
                             <label class="control-label">
-                                <i class="fas fa-briefcase"></i> Signatory Title
+                                <i class="fas fa-briefcase"></i> Title
                             </label>
                             <input class="control-input" id="instructorTitle" 
                                    placeholder="e.g. Dean of Faculty" value="Dean of Faculty">
@@ -154,16 +113,16 @@
                            placeholder="Auto-generated" readonly>
                 </div>
 
-                <!-- QR Verification URL -->
+                <!-- Verification URL -->
                 <div class="control-section">
                     <label class="control-label">
                         <i class="fas fa-link"></i> Verification URL
                     </label>
                     <input class="control-input" id="verificationUrl" 
-                           placeholder="e.g. https://school.com/verify" 
+                           placeholder="https://verify.school.edu" 
                            value="https://verify.school.edu">
                     <div class="control-hint">
-                        <i class="fas fa-info-circle"></i> QR code will point to this URL with certificate ID
+                        <i class="fas fa-info-circle"></i> QR code will encode this URL + certificate ID
                     </div>
                 </div>
 
@@ -173,11 +132,11 @@
                         <i class="fas fa-layer-group"></i> Template Style
                     </label>
                     <div class="template-grid" id="templateGrid">
-                        <div class="template-option active" data-template="classic">
-                            <i class="fas fa-landmark"></i> Classic
+                        <div class="template-option active" data-template="navy">
+                            <i class="fas fa-moon"></i> Navy
                         </div>
-                        <div class="template-option" data-template="modern">
-                            <i class="fas fa-bolt"></i> Modern
+                        <div class="template-option" data-template="classic">
+                            <i class="fas fa-landmark"></i> Classic
                         </div>
                         <div class="template-option" data-template="premium">
                             <i class="fas fa-crown"></i> Premium
@@ -191,15 +150,15 @@
                 <!-- Accent Colors -->
                 <div class="control-section">
                     <label class="control-label">
-                        <i class="fas fa-palette"></i> Accent Color
+                        <i class="fas fa-palette"></i> Accent Color (Gold/Silver)
                     </label>
                     <div class="color-row" id="colorRow">
-                        <div class="color-swatch active" style="background:#1a5276;" data-color="#1a5276"></div>
+                        <div class="color-swatch active" style="background:#FFD700;" data-color="#FFD700"></div>
+                        <div class="color-swatch" style="background:#C9A84C;" data-color="#C9A84C"></div>
+                        <div class="color-swatch" style="background:#C0C0C0;" data-color="#C0C0C0"></div>
+                        <div class="color-swatch" style="background:#B8860B;" data-color="#B8860B"></div>
                         <div class="color-swatch" style="background:#A51C30;" data-color="#A51C30"></div>
-                        <div class="color-swatch" style="background:#FFD700;" data-color="#FFD700"></div>
-                        <div class="color-swatch" style="background:#2C3E50;" data-color="#2C3E50"></div>
-                        <div class="color-swatch" style="background:#8B0000;" data-color="#8B0000"></div>
-                        <div class="color-swatch" style="background:#1a8a5e;" data-color="#1a8a5e"></div>
+                        <div class="color-swatch" style="background:#E8D5B7;" data-color="#E8D5B7"></div>
                     </div>
                 </div>
 
@@ -219,16 +178,28 @@
                     </div>
                 </div>
 
+                <!-- Institute Name -->
+                <div class="control-section">
+                    <label class="control-label">
+                        <i class="fas fa-school"></i> Institution Name
+                    </label>
+                    <input class="control-input" id="instituteName" 
+                           placeholder="e.g. Oxford University" value="Oxford University">
+                </div>
+
                 <!-- Logo Upload -->
                 <div class="control-section">
                     <label class="control-label">
-                        <i class="fas fa-image"></i> School Logo / Crest
+                        <i class="fas fa-image"></i> Logo / Crest
                     </label>
                     <div class="upload-zone" id="logoUploadZone">
                         <i class="fas fa-cloud-upload-alt"></i>
                         <span>Drop logo or click to browse</span>
                         <span class="file-name" id="logoFileName">No file selected</span>
                         <input type="file" id="logoFileInput" accept="image/*">
+                    </div>
+                    <div class="control-hint">
+                        <i class="fas fa-info-circle"></i> Logo appears on certificate (white background area)
                     </div>
                 </div>
 
@@ -254,7 +225,7 @@
                     </button>
                 </div>
 
-                <!-- QR Verification Badge -->
+                <!-- QR Badge -->
                 <div class="verification-badge">
                     <i class="fas fa-qrcode"></i>
                     <span>QR Code Verification</span>
@@ -282,12 +253,14 @@
                 </div>
 
                 <div class="certificate-wrapper" id="certWrapper">
-                    <div id="certificate" class="template-classic">
+                    <div id="certificate" class="template-navy">
                         <div class="cert-inner">
-                            <!-- Logo Area -->
+                            <!-- Logo Container - White background for logo -->
                             <div id="logoContainer">
-                                <img id="logoPreview" style="max-height:70px;max-width:180px;display:none;" alt="Logo">
-                                <div class="cert-logo" id="logoText">SCHOOL NAME</div>
+                                <div id="logoBackground">
+                                    <img id="logoPreview" style="max-height:80px;max-width:200px;display:none;" alt="Logo">
+                                    <div class="cert-logo" id="logoText">UNIVERSITY OF OXFORD</div>
+                                </div>
                             </div>
 
                             <!-- Certificate Title -->
@@ -296,10 +269,10 @@
 
                             <!-- Award Text -->
                             <div class="cert-body-text">This certifies that</div>
-                            <div class="cert-recipient" id="recipientDisplay">Recipient Name</div>
+                            <div class="cert-recipient" id="recipientDisplay">Sarah Johnson</div>
 
                             <!-- Course -->
-                            <div class="cert-course" id="courseDisplay">Course Name</div>
+                            <div class="cert-course" id="courseDisplay">Executive Leadership Program</div>
 
                             <!-- Details -->
                             <div class="cert-details-row">
@@ -322,8 +295,8 @@
                                 <div class="cert-signature-block">
                                     <img id="signaturePreview" class="cert-signature-img" alt="Signature">
                                     <div class="cert-signature-line" id="sigLine"></div>
-                                    <div class="cert-signature-name" id="certSignatureName">Signatory Name</div>
-                                    <div class="cert-signature-title" id="certSignatureTitle">Title</div>
+                                    <div class="cert-signature-name" id="certSignatureName">Prof. James Miller</div>
+                                    <div class="cert-signature-title" id="certSignatureTitle">Dean of Faculty</div>
                                 </div>
                             </div>
 

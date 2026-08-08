@@ -1297,12 +1297,11 @@
 
             function updateQR() {
                 const name = recipientDisplay.textContent.trim() || 'Recipient';
-                const id = certIdDisplay.textContent.trim() || 'ID';
-                // Keep the payload short (name + ID only). Long multi-line text forces a
-                // denser QR code with tinier squares, which is much harder for phone
-                // cameras to resolve at small on-screen sizes -- that's the most likely
-                // reason a scan showed nothing. Short payload = low-density, easy-to-read code.
-                const payload = `${instituteNameInput.value || 'Cre8learn Institute'} | ${name} | ID: ${id}`;
+                const course = courseDisplay.textContent.trim() || 'Course';
+                // Course name matters more to a verifier than the internal cert ID,
+                // so it's included here; ID is dropped to keep the code low-density
+                // and easy to scan (see note in the enhancement history above).
+                const payload = `${instituteNameInput.value || 'Cre8learn Institute'} | ${name} | ${course}`;
 
                 // Generate the QR code entirely client-side (no network call needed),
                 // so it always renders and also survives PDF/PNG export via html2canvas.

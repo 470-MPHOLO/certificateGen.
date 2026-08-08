@@ -1559,6 +1559,26 @@
                 reader.readAsDataURL(file);
             }
 
+            // Uploaded logo/signature images are data URLs set via FileReader.
+            // html2canvas can fire its capture before the browser has fully
+            // decoded them, which renders that spot blank -- on the navy
+            // template's white logo card, a blank image reads as "the logo
+            // went completely white". This waits for real decode completion
+            // (or a safety timeout) so the logo's original colors always show.
+            async function waitForCertImages() {
+                const imgs = [logoPreview, signaturePreview].filter(
+                    img => img.style.display !== 'none' && img.src
+                );
+                await Promise.all(imgs.map(img => {
+                    if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
+                    return new Promise(resolve => {
+                        img.onload = resolve;
+                        img.onerror = resolve;
+                        setTimeout(resolve, 1500);
+                    });
+                }));
+            }
+
             async function downloadPDF() {
                 const btn = downloadPdfBtn;
                 const orig = btn.innerHTML;
@@ -1572,8 +1592,10 @@
                     // Remove zoom for clean capture
                     element.style.transform = 'none';
                     element.style.transformOrigin = 'center center';
-                    // Force reflow
+                    // Force reflow, then make sure the logo/signature images
+                    // have actually finished decoding before the screenshot.
                     await new Promise(r => setTimeout(r, 100));
+                    await waitForCertImages();
 
                     const canvas = await html2canvas(element, {
                         scale: 4,
@@ -1627,6 +1649,7 @@
                     el.style.transform = 'none';
                     el.style.transformOrigin = 'center center';
                     await new Promise(r => setTimeout(r, 100));
+                    await waitForCertImages();
 
                     const canvas = await html2canvas(el, {
                         scale: 4,

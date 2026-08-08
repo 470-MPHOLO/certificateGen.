@@ -686,72 +686,74 @@
             font-weight: 400;
         }
 
-        /* ===== NAVY TEMPLATE — deep navy background, pure white text ===== */
+        /* ===== NAVY TEMPLATE — background tone driven by --nv-* custom
+           properties, set from JS via the Background Tone picker. Falls back
+           to the default dark navy scheme if no tone has been picked yet. ===== */
         #certificate.template-navy {
-            background: #0d2b42;
-            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: var(--nv-bg, #0d2b42);
+            border: 2px solid var(--nv-border, rgba(255, 255, 255, 0.15));
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
         }
         .template-navy .cert-inner {
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--nv-border-soft, rgba(255, 255, 255, 0.08));
             padding: 24px 20px;
             flex: 1;
             display: flex;
             flex-direction: column;
             background: transparent;
         }
-        /* Logo sits on its own white card so any uploaded logo (light or dark)
-           stays fully legible against the navy background — this is the fix for
-           the "logo interference" problem. */
+        /* Logo sits on its own card so any uploaded logo (light or dark) stays
+           legible. On dark tones this is a white card; on light tones (white/
+           grey) the card becomes transparent since the page is already light. */
         .template-navy #logoBackground {
-            background: #ffffff;
+            background: var(--nv-logo-card, #ffffff);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             padding: 6px 18px;
             border-radius: 6px;
             min-height: 44px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+            box-shadow: var(--nv-logo-shadow, 0 2px 10px rgba(0, 0, 0, 0.25));
             align-self: center;
         }
         .template-navy .cert-logo {
-            color: #123a58;
+            color: var(--nv-logo-text, #123a58);
             font-weight: 700;
         }
         .template-navy .cert-title {
-            color: #ffffff;
+            color: var(--nv-text, #ffffff);
         }
         .template-navy .cert-sub {
-            color: rgba(255, 255, 255, 0.7);
-            border-bottom-color: rgba(255, 255, 255, 0.2);
+            color: var(--nv-text-soft, rgba(255, 255, 255, 0.7));
+            border-bottom-color: var(--nv-border, rgba(255, 255, 255, 0.2));
         }
         .template-navy .cert-body-text {
-            color: rgba(255, 255, 255, 0.55);
+            color: var(--nv-text-soft, rgba(255, 255, 255, 0.55));
         }
         .template-navy .cert-recipient {
-            color: #ffffff;
-            border-bottom-color: rgba(255, 255, 255, 0.2);
+            color: var(--nv-text, #ffffff);
+            border-bottom-color: var(--nv-border, rgba(255, 255, 255, 0.2));
         }
         .template-navy .cert-course {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--nv-text, rgba(255, 255, 255, 0.9));
         }
         .template-navy .cert-detail-item {
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--nv-text-soft, rgba(255, 255, 255, 0.5));
         }
         .template-navy .cert-detail-item .cert-detail-value {
-            color: #ffffff;
+            color: var(--nv-text, #ffffff);
         }
         .template-navy .cert-signature-line {
-            background: rgba(255, 255, 255, 0.3);
+            background: var(--nv-border, rgba(255, 255, 255, 0.3));
         }
         .template-navy .cert-signature-name {
-            color: #ffffff;
+            color: var(--nv-text, #ffffff);
         }
         .template-navy .cert-signature-title {
-            color: rgba(255, 255, 255, 0.55);
+            color: var(--nv-text-soft, rgba(255, 255, 255, 0.55));
         }
         .template-navy .cert-id {
-            color: rgba(255, 255, 255, 0.35);
+            color: var(--nv-text-soft, rgba(255, 255, 255, 0.35));
         }
 
         /* Neutral wrapper used by every template. On light templates this stays
@@ -1173,6 +1175,19 @@
                 </div>
 
                 <div class="control-section">
+                    <label class="control-label"><i class="fas fa-fill-drip"></i> Background Tone</label>
+                    <div class="color-row" id="bgToneRow">
+                        <div class="color-swatch active" style="background:#0d2b42;" data-bg="#0d2b42" data-scheme="light" title="Deep Navy"></div>
+                        <div class="color-swatch" style="background:#123a58;" data-bg="#123a58" data-scheme="light" title="Navy"></div>
+                        <div class="color-swatch" style="background:#1e5478;" data-bg="#1e5478" data-scheme="light" title="Steel Navy"></div>
+                        <div class="color-swatch" style="background:#33383f;" data-bg="#33383f" data-scheme="light" title="Charcoal Grey"></div>
+                        <div class="color-swatch" style="background:#e5e7eb;" data-bg="#e5e7eb" data-scheme="dark" title="Light Grey"></div>
+                        <div class="color-swatch" style="background:#ffffff;border:2px solid #cbd5e1;" data-bg="#ffffff" data-scheme="dark" title="White"></div>
+                    </div>
+                    <div class="control-hint"><i class="fas fa-info-circle"></i> Applies to the Navy template — text switches light/dark automatically for contrast</div>
+                </div>
+
+                <div class="control-section">
                     <label class="control-label"><i class="fas fa-palette"></i> Accent Color</label>
                     <div class="color-row" id="colorRow">
                         <div class="color-swatch active" style="background:#0f3b2e;" data-color="#0f3b2e"></div>
@@ -1311,7 +1326,8 @@
 
             const templateOptions = document.querySelectorAll('.template-option');
             const certificateEl = document.getElementById('certificate');
-            const colorSwatches = document.querySelectorAll('.color-swatch');
+            const colorSwatches = document.querySelectorAll('#colorRow .color-swatch');
+            const bgToneSwatches = document.querySelectorAll('#bgToneRow .color-swatch');
 
             const sigFileInput = document.getElementById('sigFileInput');
             const sigFileName = document.getElementById('sigFileName');
@@ -1343,6 +1359,8 @@
 
             let currentTemplate = 'classic';
             let currentColor = '#0f3b2e';
+            let currentBgTone = '#0d2b42';
+            let currentBgScheme = 'light';
             let signatureDataUrl = null;
             let logoDataUrl = null;
             let zoomLevel = 1;
@@ -1414,6 +1432,35 @@
                 }
             }
 
+            // Sets the --nv-* custom properties consumed by the .template-navy
+            // CSS rules, so the Background Tone picker can drive both the card
+            // color and readable text contrast (light text on dark tones,
+            // dark text on white/light-grey tones), plus the logo card style.
+            function applyNavyBackground() {
+                certificateEl.style.setProperty('--nv-bg', currentBgTone);
+                if (currentBgScheme === 'light') {
+                    // Dark background tone -> white/light text
+                    certificateEl.style.setProperty('--nv-text', '#ffffff');
+                    certificateEl.style.setProperty('--nv-text-soft', 'rgba(255, 255, 255, 0.62)');
+                    certificateEl.style.setProperty('--nv-border', 'rgba(255, 255, 255, 0.2)');
+                    certificateEl.style.setProperty('--nv-border-soft', 'rgba(255, 255, 255, 0.08)');
+                    certificateEl.style.setProperty('--nv-logo-card', '#ffffff');
+                    certificateEl.style.setProperty('--nv-logo-text', currentBgTone);
+                    certificateEl.style.setProperty('--nv-logo-shadow', '0 2px 10px rgba(0, 0, 0, 0.25)');
+                } else {
+                    // Light background tone (white / light grey) -> dark text,
+                    // and the logo card becomes transparent since the page is
+                    // already light (no need for a white card-on-white-card).
+                    certificateEl.style.setProperty('--nv-text', '#16232d');
+                    certificateEl.style.setProperty('--nv-text-soft', 'rgba(22, 35, 45, 0.62)');
+                    certificateEl.style.setProperty('--nv-border', 'rgba(22, 35, 45, 0.18)');
+                    certificateEl.style.setProperty('--nv-border-soft', 'rgba(22, 35, 45, 0.08)');
+                    certificateEl.style.setProperty('--nv-logo-card', 'transparent');
+                    certificateEl.style.setProperty('--nv-logo-text', '#16232d');
+                    certificateEl.style.setProperty('--nv-logo-shadow', 'none');
+                }
+            }
+
             function render() {
                 let name = recipientInput.value.trim();
                 if (!name) name = '[Recipient]';
@@ -1458,6 +1505,10 @@
                     sub.style.color = '';
                     course.style.color = '';
                     logo.style.color = '';
+                }
+
+                if (currentTemplate === 'navy') {
+                    applyNavyBackground();
                 }
 
                 if (signatureDataUrl) {
@@ -1612,6 +1663,8 @@
                     instructorTitle: instructorTitleInput.value,
                     template: currentTemplate,
                     color: currentColor,
+                    bgTone: currentBgTone,
+                    bgScheme: currentBgScheme,
                     signature: signatureDataUrl || null,
                     logo: logoDataUrl || null,
                     id: certIdDisplay.textContent,
@@ -1638,6 +1691,8 @@
                 instructorTitleInput.value = latest.instructorTitle || 'Founder & Instructor';
                 currentTemplate = latest.template || 'classic';
                 currentColor = latest.color || '#0f3b2e';
+                currentBgTone = latest.bgTone || '#0d2b42';
+                currentBgScheme = latest.bgScheme || 'light';
                 signatureDataUrl = latest.signature || null;
                 logoDataUrl = latest.logo || null;
 
@@ -1646,6 +1701,9 @@
                 });
                 colorSwatches.forEach(el => {
                     el.classList.toggle('active', el.dataset.color === currentColor);
+                });
+                bgToneSwatches.forEach(el => {
+                    el.classList.toggle('active', el.dataset.bg === currentBgTone);
                 });
                 if (signatureDataUrl) {
                     sigFileName.textContent = 'Loaded from history';
@@ -1672,6 +1730,8 @@
                 instructorTitleInput.value = 'Founder & Instructor';
                 currentTemplate = 'classic';
                 currentColor = '#0f3b2e';
+                currentBgTone = '#0d2b42';
+                currentBgScheme = 'light';
                 signatureDataUrl = null;
                 logoDataUrl = null;
                 sigFileName.textContent = 'No file selected';
@@ -1688,6 +1748,9 @@
                 });
                 colorSwatches.forEach(el => {
                     el.classList.toggle('active', el.dataset.color === '#0f3b2e');
+                });
+                bgToneSwatches.forEach(el => {
+                    el.classList.toggle('active', el.dataset.bg === '#0d2b42');
                 });
 
                 zoomLevel = 1;
@@ -1726,6 +1789,23 @@
                     this.classList.add('active');
                     currentColor = this.dataset.color;
                     render();
+                });
+            });
+
+            bgToneSwatches.forEach(el => {
+                el.addEventListener('click', function() {
+                    bgToneSwatches.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    currentBgTone = this.dataset.bg;
+                    currentBgScheme = this.dataset.scheme;
+                    // This control only has visible effect on the Navy template,
+                    // so switch to it automatically if another template is active.
+                    if (currentTemplate !== 'navy') {
+                        currentTemplate = 'navy';
+                        templateOptions.forEach(o => o.classList.toggle('active', o.dataset.template === 'navy'));
+                    }
+                    render();
+                    showToast(`Background: ${this.title}`, 'fa-fill-drip', '#3b82f6');
                 });
             });
 
